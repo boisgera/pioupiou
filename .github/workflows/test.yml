@@ -21,4 +21,4 @@ jobs:
           environment-file: environment.yml
 
       - name: Test pioupiou
-        run: ./test
+        run: ./test -v
