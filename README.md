@@ -26,15 +26,16 @@ variable.
 Once you have create a random variable, you can sample the universe
 to get an `omega` 
 
-    >>> Universe.restart()
-    >>> omega = Universe()
+    >>> restart()
+    >>> U = Uniform(0.0, 1.0)
+    >>> omega = Omega()
     >>> u = U(omega)
     >>> u
     0.6369616873214543
 
 --------------------------------------------------------------------------------
 
-    >>> Universe.restart()
+    >>> restore()
     >>> U1 = Uniform(0.0, 1.0)
     >>> for n in range(10):
     ...     print(U1())
@@ -49,7 +50,7 @@ to get an `omega`
     0.5436249914654229
     0.9350724237877682
 
-    >>> Universe.restart()
+    >>> restore()
     >>> U2 = Uniform(0.0, U1)
     >>> for n in range(10):
     ...     print(U2())
@@ -64,7 +65,7 @@ to get an `omega`
     0.2955281313457811
     0.8743604377283316
 
-    >>> Universe.restart()
+    >>> restore()
     >>> N = Normal(1.5, 2.7)
     >>> s = [N() for i in range(10000)]
     >>> print("mean:", np.mean(s))  
@@ -72,12 +73,12 @@ to get an `omega`
     >>> print("std dev:", np.std(s))
     std dev: 2.705182786283677
 
-    >>> Universe.restart()
+    >>> restore()
     >>> X, Y, Z = Uniform(), Uniform(1.0, 2.0), Normal()
-    >>> print("dimension of the universe:", Universe.n)
+    >>> print("dimension of the universe:", Omega.n)
     dimension of the universe: 3
 
-    >>> Universe.restart()
+    >>> restore()
     >>> U1 = Uniform()
     >>> U2 = Uniform(1.0, 2.0)
     >>> @function
@@ -93,7 +94,7 @@ to get an `omega`
     >>> print([Z() for i in range(10)])
     [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
-    >>> Universe.restart()
+    >>> restore()
     >>> print(exp(1.0))
     2.718281828459045
     >>> N1 = Normal(1.0, 0.001)
@@ -101,14 +102,14 @@ to get an `omega`
     >>> print([X() for i in range(10)])
     [2.7192343432437776, 2.7166147876215536, 2.713557490426163, 2.7124942218733623, 2.7207022084297448, 2.721975546967326, 2.719017389882115, 2.719943997947149, 2.718579688242829, 2.7224022572035995]
 
-    >>> Universe.restart()
+    >>> restore()
     >>> N1 = Normal(1.0, 0.01)
     >>> N2 = Normal(2.0, 0.02)
     >>> X = N1 + N2
     >>> print([X() for i in range(10)])
     [2.991234328698495, 2.939976784719813, 3.036058532707301, 3.0149314353211336, 3.031389171415428, 2.9534457078177256, 2.974076754815227, 2.9874767340828736, 3.013029448690265, 2.9908472339825285]
 
-    >>> Universe.restart()
+    >>> restore()
     >>> U1 = Uniform()
     >>> X = U1 + 1.0
     >>> Y = 1.0 + U1
@@ -120,7 +121,7 @@ to get an `omega`
     >>> print([Z() for i in range(10)])
     [1.0574413460647132, 1.2640128858165947, 2.7909859349704345, 2.7132332870402167, 2.609469058395303, 1.9145635741681477, 3.9888475276151443, 3.923708639344742, 2.8410517814471183, 2.724015822618484]
 
-    >>> Universe.restart()
+    >>> restore()
     >>> U1 = Uniform()
     >>> B = U1 >= 1/3
     >>> print([B() for i in range(10)])

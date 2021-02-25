@@ -13,20 +13,9 @@ import wrapt
 # right ? And the experts could set the seed to None to get a random init.
 # But by default we are deterministic.
 
+# Yes, i'd probably rather have restart and save external ...
+
 class Universe: # actually, looks like a random VECTOR, the only one in town so far. Funny :)
-    def __init__(self): 
-        self.restart()
-        self.n = 0 # TODO: HARD restart, with self.n set to 0 again ?
-        # Shit, a hard restart is *necessary* if we want some predictability ;
-        # The seed regeneration is not good enough, since the new variables
-        # won't ocuppy the same slots.
-    def restart(self, state=0): # do we want a method or an external function ?
-        # same question for save
-        self.ss = np.random.SeedSequence(state)
-        self.rng = npr.default_rng(self.ss)
-    def save(self):
-        return self.ss.entropy # n is also needed right ? Ahhh, fuck save for now ?
-        # we would need to customize restart too. Need more thought.
     def __call__(self, omega=None):
         if omega is not None:
             return omega
@@ -41,7 +30,24 @@ Omega = Universe() # the universe (as long as we sample the variables only once 
 # otherwise the "true" univers is the cartesian product of this one).
 # Here U is the "universal" random vector, that sums up everything there is
 # to know about the universe.
-    
+
+def restore(snapshot=None):
+    if snapshot is None:
+        snapshot = (0, 0)
+    n, state = snapshot
+    Omega.ss = np.random.SeedSequence(state)
+    Omega.rng = npr.default_rng(Omega.ss)
+    Omega.n = n        
+
+restart = restore
+restore()
+
+def save():
+    snapshot = (Omega.n, Omega.ss.entropy)
+    return snapshot
+
+# ------------------------------------------------------------------------------
+
 # TODO: these functions already exist in the operator module, don't redeclare them.
 def __add__(x, y):
     return x + y
