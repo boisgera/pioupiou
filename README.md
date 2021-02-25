@@ -1,11 +1,38 @@
-# Pioupiou
+Pioupiou
+================================================================================
 
 [![test](https://github.com/boisgera/pioupiou/actions/workflows/test.yml/badge.svg)](https://github.com/boisgera/pioupiou/actions/workflows/test.yml)
 
     >>> import numpy as np
     >>> from pioupiou import *
 
-We start the 
+The universe
+--------------------------------------------------------------------------------
+
+A random variable 
+
+    >>> U = Uniform(0.0, 1.0)
+    >>> u = U()
+    >>> u
+    0.6369616873214543
+
+    >>> u = U()
+    >>> u
+    0.2697867137638703
+
+The universe is literally the source of the randomness of every variable :
+sample `Universe` to get an `omega` and use it as an argument of a random
+variable.
+Once you have create a random variable, you can sample the universe
+to get an `omega` 
+
+    >>> Universe.restart()
+    >>> omega = Universe()
+    >>> u = U(omega)
+    >>> u
+    0.6369616873214543
+
+--------------------------------------------------------------------------------
 
     >>> Universe.restart()
     >>> U1 = Uniform(0.0, 1.0)

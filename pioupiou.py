@@ -13,13 +13,16 @@ import wrapt
 # right ? And the experts could set the seed to None to get a random init.
 # But by default we are deterministic.
 
-class UniverseType: # actually, looks like a random VECTOR, the only one in town so far. Funny :)
+class Universe: # actually, looks like a random VECTOR, the only one in town so far. Funny :)
     def __init__(self): 
-        self.restart(0)
+        self.restart()
+        self.n = 0 # TODO: HARD restart, with self.n set to 0 again ?
+        # Shit, a hard restart is *necessary* if we want some predictability ;
+        # The seed regeneration is not good enough, since the new variables
+        # won't ocuppy the same slots.
     def restart(self, state=0):
         self.ss = np.random.SeedSequence(state)
         self.rng = npr.default_rng(self.ss)
-        self.n = 0
     def save(self):
         return self.ss.entropy
     def __call__(self, omega=None):
@@ -28,7 +31,11 @@ class UniverseType: # actually, looks like a random VECTOR, the only one in town
         else:
             return self.rng.uniform(size=self.n)
 
-Universe = UniverseType() # the universe (as long as we sample the variables only once ;
+# TODO : need to make all distributions universe-dependent ? Urk :(
+# Or single universe at a time ? And maybe a with construct ? So that
+# in any VA invocation, a universe is bound ?
+
+Omega = Universe() # the universe (as long as we sample the variables only once ;
 # otherwise the "true" univers is the cartesian product of this one).
 # Here U is the "universal" random vector, that sums up everything there is
 # to know about the universe.
@@ -127,12 +134,12 @@ class Constant(RandomVariable):
 # ------------------------------------------------------------------------------
 class Uniform(RandomVariable):
     def __init__(self, low=0.0, high=1.0):
-        self.n = Universe.n
-        Universe.n += 1
+        self.n = Omega.n
+        Omega.n += 1
         self.low = randomize(low)
         self.high = randomize(high)
     def __call__(self, omega=None):
-        omega = Universe(omega)
+        omega = Omega(omega)
         u_n = omega[self.n] # localized abstraction leak HERE.
         return self.low(omega) * (1 - u_n) + self.high(omega) * u_n
 
@@ -141,7 +148,7 @@ class Bernoulli(RandomVariable):
         self.U = Uniform()
         self.P = randomize(p)
     def __call__(self, omega=None):
-        omega = Universe(omega)
+        omega = Omega(omega)
         u = self.U(omega)
         p = self.P(omega)
         return u <= p
@@ -193,7 +200,7 @@ def function(wrapped, instance, args, kwargs):
             self.args = [randomize(arg) for arg in args]
             self.kwargs = {k: randomize(v) for k, v in kwargs.items()}
         def __call__(self, omega=None):
-            omega = Universe(omega) # manage u = None
+            omega = Omega(omega) # manage u = None
             args_values = [arg(omega) for arg in self.args]
             kwargs_values = {k: v(omega) for k, v in kwargs.items()}
             return wrapped(*args_values, **kwargs_values)
