@@ -2,6 +2,7 @@
 
 [![test](https://github.com/boisgera/pioupiou/actions/workflows/test.yml/badge.svg)](https://github.com/boisgera/pioupiou/actions/workflows/test.yml)
 
+    >>> import numpy as np
     >>> from pioupiou import *
 
     >>> Universe.restart()
