@@ -136,6 +136,16 @@ class Uniform(RandomVariable):
         u_n = omega[self.n] # localized abstraction leak HERE.
         return self.low(omega) * (1 - u_n) + self.high(omega) * u_n
 
+class Bernoulli(RandomVariable):
+    def __init__(self, p=0.5):
+        self.U = Uniform()
+        self.P = randomize(p)
+    def __call__(self, omega=None):
+        omega = Universe(omega)
+        u = self.U(omega)
+        p = self.P(omega)
+        return u <= p
+
 class Normal(RandomVariable):
     def __init__(self, mu=0.0, sigma=1.0):
         self.U = Uniform()
@@ -194,25 +204,15 @@ for name in dir(np):
     if isinstance(item, np.ufunc):
         globals()[name] = function(item)
 
-# import matplotlib.pyplot as pp
-# import scipy.stats as ss
-# C = Cauchy()
-# data = [C() for _ in range(10000)]
-# print(data)
-# pp.hist(data, bins=100, range=(-10,10))
-# pp.show()
-# kernel = ss.gaussian_kde(data)
-# x = np.arange(-10, 10, 0.01)
-# pp.plot(x, kernel(x))
-# pp.show()
 
-import matplotlib.pyplot as pp
-import scipy.stats as ss
-U = Uniform()
-data = [U() for _ in range(10000)]
-#print(data)
-pp.hist(data, bins=100, range=(-2,2), density=True, color="blue", alpha=0.25)
-kernel = ss.gaussian_kde(data)
-x = np.arange(-2, 2, 0.01)
-pp.plot(x, kernel(x), color="blue")
-pp.show()
+if False:
+    import matplotlib.pyplot as pp
+    import scipy.stats as ss
+    U = Uniform()
+    data = [U() for _ in range(10000)]
+    #print(data)
+    pp.hist(data, bins=100, range=(-2,2), density=True, color="blue", alpha=0.25)
+    kernel = ss.gaussian_kde(data)
+    x = np.arange(-2, 2, 0.01)
+    pp.plot(x, kernel(x), color="blue")
+    pp.show()
