@@ -123,7 +123,8 @@ class Constant(RandomVariable):
     def __call__(self, omega=None):
         return self.rv(omega)
 
-
+# Distributions
+# ------------------------------------------------------------------------------
 class Uniform(RandomVariable):
     def __init__(self, low=0.0, high=1.0):
         self.n = Universe.n
@@ -138,17 +139,35 @@ class Uniform(RandomVariable):
 class Normal(RandomVariable):
     def __init__(self, mu=0.0, sigma=1.0):
         self.U = Uniform()
-        if not isinstance(mu, RandomVariable):
-            mu = Constant(mu)
-        if not isinstance(sigma, RandomVariable):
-            sigma = Constant(sigma)
-        self.mu = mu
-        self.sigma = sigma
+        self.mu = randomize(mu)
+        self.sigma = randomize(sigma)
     def __call__(self, omega=None):
         u = self.U(omega)
         mu = self.mu(omega)
         sigma = self.sigma(omega)
         return ss.erfinv(2*u - 1) * np.sqrt(2) * sigma + mu
+
+class Exponential(RandomVariable):
+    def __init__(self, lambda_=1.0):
+        self.U = Uniform()
+        self.lambda_ = randomize(lambda_)
+    def __call__(self, omega=None):
+        u = self.U(omega)
+        lambda_ = self.lambda_(omega)
+        return - np.log(1 - u) / lambda_
+
+class Cauchy(RandomVariable):
+    def __init__(self, x0=0.0, gamma=1.0):
+        self.U = Uniform()
+        self.x0 = randomize(x0)
+        self.gamma = randomize(gamma)
+    def __call__(self, omega=None):
+        u = self.U(omega)
+        x0 = self.x0(omega)
+        gamma = self.gamma(omega)
+        return x0 + gamma * np.tan(np.pi * (u - 0.5))
+
+# ------------------------------------------------------------------------------
 
 @wrapt.decorator
 def function(wrapped, instance, args, kwargs):
@@ -174,3 +193,26 @@ for name in dir(np):
     item = getattr(np, name)
     if isinstance(item, np.ufunc):
         globals()[name] = function(item)
+
+# import matplotlib.pyplot as pp
+# import scipy.stats as ss
+# C = Cauchy()
+# data = [C() for _ in range(10000)]
+# print(data)
+# pp.hist(data, bins=100, range=(-10,10))
+# pp.show()
+# kernel = ss.gaussian_kde(data)
+# x = np.arange(-10, 10, 0.01)
+# pp.plot(x, kernel(x))
+# pp.show()
+
+import matplotlib.pyplot as pp
+import scipy.stats as ss
+U = Uniform()
+data = [U() for _ in range(10000)]
+#print(data)
+pp.hist(data, bins=100, range=(-2,2), density=True, color="blue", alpha=0.25)
+kernel = ss.gaussian_kde(data)
+x = np.arange(-2, 2, 0.01)
+pp.plot(x, kernel(x), color="blue")
+pp.show()
