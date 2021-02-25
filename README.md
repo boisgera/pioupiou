@@ -5,6 +5,8 @@
     >>> import numpy as np
     >>> from pioupiou import *
 
+We start the 
+
     >>> Universe.restart()
     >>> U1 = Uniform(0.0, 1.0)
     >>> for n in range(10):

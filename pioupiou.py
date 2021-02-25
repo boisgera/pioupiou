@@ -8,16 +8,24 @@ import numpy.random as npr
 import scipy.special as ss
 import wrapt
 
+# We need to support : random init, custom seed it, continuation (save/restore)
+# What should be the default ? Init at 0 or None ? I'd rather fo with 0 here,
+# right ? And the experts could set the seed to None to get a random init.
+# But by default we are deterministic.
+
 class UniverseType: # actually, looks like a random VECTOR, the only one in town so far.
-    def __init__(self, seed=0, n=0):
-        self.seed = seed
-        self.rng = npr.default_rng(self.seed)
+    def __init__(self): 
+        self.restart(0)
+    def restart(self, seed=0):
+        self.ss = np.random.SeedSequence(seed)
+        self.rng = npr.default_rng(self.ss)
         self.n = 0
-    def restart(self):
-        self.__init__(self.seed)
-    def __call__(self, u=None):
-        if u is not None:
-            return u
+    def save(self):
+        return self.ss.entropy
+    load = restart
+    def __call__(self, omega=None):
+        if omega is not None:
+            return omega
         else:
             return self.rng.uniform(size=self.n)
 
@@ -113,38 +121,35 @@ class Constant(RandomVariable):
             self.rv = value
         else:
             self.rv = lambda u: value
-    def __call__(self, u=None):
-        return self.rv(u)
+    def __call__(self, omega=None):
+        return self.rv(omega)
 
 
 class Uniform(RandomVariable):
     def __init__(self, low=0.0, high=1.0):
         self.n = Universe.n
         Universe.n += 1
-        if not isinstance(low, RandomVariable):
-            low = Constant(low)
-        if not isinstance(high, RandomVariable):
-            high = Constant(high)
-        self.low = low
-        self.high = high
-    def __call__(self, u=None):
-        if u is None:
-            u = Universe()
-        u_n = u[self.n]
-        return self.low(u) * (1 - u_n) + self.high(u) * u_n
+        self.low = randomize(low)
+        self.high = randomize(high)
+    def __call__(self, omega=None):
+        omega = Universe(omega)
+        u_n = omega[self.n] # localized abstraction leak HERE.
+        return self.low(omega) * (1 - u_n) + self.high(omega) * u_n
 
 class Normal(RandomVariable):
     def __init__(self, mu=0.0, sigma=1.0):
-        self.U1 = Uniform()
+        self.U = Uniform()
         if not isinstance(mu, RandomVariable):
             mu = Constant(mu)
         if not isinstance(sigma, RandomVariable):
             sigma = Constant(sigma)
         self.mu = mu
         self.sigma = sigma
-    def __call__(self, u=None):
-        u1 = self.U1(u)
-        return ss.erfinv(2*u1 - 1) * np.sqrt(2) * self.sigma(u1) + self.mu(u1)
+    def __call__(self, omega=None):
+        u = self.U(omega)
+        mu = self.mu(omega)
+        sigma = self.sigma(omega)
+        return ss.erfinv(2*u - 1) * np.sqrt(2) * sigma + mu
 
 @wrapt.decorator
 def function(wrapped, instance, args, kwargs):
@@ -159,10 +164,10 @@ def function(wrapped, instance, args, kwargs):
             # Does it work by default ?
             self.args = [randomize(arg) for arg in args]
             self.kwargs = {k: randomize(v) for k, v in kwargs.items()}
-        def __call__(self, u=None):
-            u = Universe(u) # manage u = None
-            args_values = [arg(u) for arg in self.args]
-            kwargs_values = {k: v(u) for k, v in kwargs.items()}
+        def __call__(self, omega=None):
+            omega = Universe(omega) # manage u = None
+            args_values = [arg(omega) for arg in self.args]
+            kwargs_values = {k: v(omega) for k, v in kwargs.items()}
             return wrapped(*args_values, **kwargs_values)
     return Deterministic(*args, **kwargs)
 
