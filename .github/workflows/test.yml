@@ -1,0 +1,24 @@
+name: test
+on: [push]
+
+jobs:
+  main:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, windows-latest]
+    defaults:
+      run:
+        shell: bash -l {0} 
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Activate Conda environment
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          activate-environment: pioupiou
+          environment-file: environment.yml
+
+      - name: Test pioupiou
+        run: ./test

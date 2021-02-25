@@ -1,0 +1,8 @@
+name: pioupiou
+channels:
+  - conda-forge
+dependencies:
+  - python=3.8
+  - numpy
+  - scipy
+  - wrapt
