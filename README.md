@@ -1,4 +1,6 @@
-# pioupiou
+# Pioupiou
+
+[![test](https://github.com/boisgera/pioupiou/actions/workflows/test.yml/badge.svg)](https://github.com/boisgera/pioupiou/actions/workflows/test.yml)
 
     >>> from pioupiou import *
 
