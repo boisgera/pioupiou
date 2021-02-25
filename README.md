@@ -6,6 +6,8 @@ Pioupiou
     >>> import numpy as np
     >>> from pioupiou import *
 
+**TODO.** Start with the random variables, talk about the universe later.
+
 The universe
 --------------------------------------------------------------------------------
 
