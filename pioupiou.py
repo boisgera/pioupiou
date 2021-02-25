@@ -13,16 +13,15 @@ import wrapt
 # right ? And the experts could set the seed to None to get a random init.
 # But by default we are deterministic.
 
-class UniverseType: # actually, looks like a random VECTOR, the only one in town so far.
+class UniverseType: # actually, looks like a random VECTOR, the only one in town so far. Funny :)
     def __init__(self): 
         self.restart(0)
-    def restart(self, seed=0):
-        self.ss = np.random.SeedSequence(seed)
+    def restart(self, state=0):
+        self.ss = np.random.SeedSequence(state)
         self.rng = npr.default_rng(self.ss)
         self.n = 0
     def save(self):
         return self.ss.entropy
-    load = restart
     def __call__(self, omega=None):
         if omega is not None:
             return omega
