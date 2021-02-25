@@ -20,11 +20,13 @@ class Universe: # actually, looks like a random VECTOR, the only one in town so 
         # Shit, a hard restart is *necessary* if we want some predictability ;
         # The seed regeneration is not good enough, since the new variables
         # won't ocuppy the same slots.
-    def restart(self, state=0):
+    def restart(self, state=0): # do we want a method or an external function ?
+        # same question for save
         self.ss = np.random.SeedSequence(state)
         self.rng = npr.default_rng(self.ss)
     def save(self):
-        return self.ss.entropy
+        return self.ss.entropy # n is also needed right ? Ahhh, fuck save for now ?
+        # we would need to customize restart too. Need more thought.
     def __call__(self, omega=None):
         if omega is not None:
             return omega
