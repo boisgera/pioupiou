@@ -1,2 +1,2 @@
 #!/bin/bash
-python -m doctest $@ README.md
+python -m doctest $@ README.md && python -m doctest $@ tests.md
