@@ -1,4 +1,4 @@
-Pioupiou
+:bird: Pioupiou
 ================================================================================
 
 [![test](https://github.com/boisgera/pioupiou/actions/workflows/test.yml/badge.svg)](https://github.com/boisgera/pioupiou/actions/workflows/test.yml)
