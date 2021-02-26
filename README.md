@@ -22,6 +22,8 @@ and to simulate them :
     >>> print(f"mean: {np.mean(y)}, standard deviation: {np.std(y)}")
     mean: 1.251797184838589, standard deviation: 0.17495442218641913
 
+![data](images/xy.svg)
+
 Pioupiou does **not** perform inference.
 
 
