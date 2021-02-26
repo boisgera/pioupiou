@@ -18,9 +18,18 @@ and to simulate them :
 
     >>> omega = pp.Omega(1000) 
     >>> x, y = X(omega), Y(omega)
-    >>> import numpy as np
-    >>> print(f"mean: {np.mean(y)}, standard deviation: {np.std(y)}")
-    mean: 1.251797184838589, standard deviation: 0.17495442218641913
+    >>> x # doctest: +ELLIPSIS
+    array([6.36961687e-01, 2.69786714e-01, 4.09735239e-02, 1.65276355e-02,
+           8.13270239e-01, 9.12755577e-01, 6.06635776e-01, 7.29496561e-01,
+    ...
+           7.80532350e-02, 3.83319397e-01, 1.64863718e-01, 3.80007897e-01])
+    >>> y # doctest: +ELLIPSIS
+    array([1.09588258, 1.22942954, 1.01954509, 0.99213115, 1.43243465,
+           1.56003322, 1.24834735, 1.30271428, 1.10683473, 1.40516219,
+    ...
+           1.24528438, 1.22577905, 1.20728815, 0.9429806 , 1.14366864])
+
+Use this data as you see fit!
 
 ![data](images/xy.svg)
 
