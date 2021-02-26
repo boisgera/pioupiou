@@ -29,7 +29,7 @@ and to simulate them :
     ...
            1.24528438, 1.22577905, 1.20728815, 0.9429806 , 1.14366864])
 
-Use this data as you see fit!
+That's about it! Use this data as you see fit.
 
 ![data](images/xy.svg)
 
