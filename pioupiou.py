@@ -15,12 +15,31 @@ import wrapt
 
 # Yes, i'd probably rather have restart and save external ...
 
+# UPDATE : changed the design to be more vector-friendly. Consequences :
+# the nature of every random variable as a function of omega is more explicit
+# (but the very easy use cases are slightly more verbose) and Omega is now
+# a different beast (not the API of a random thingy anymore).
+
+# NOTE : X(Omega(10)) and np.array([X(Omega(1)) for _ in range(10)]
+# won't generate the same numbers, even if the universe state is the
+# same to begin with. Because the generation of numpy.random works the
+# same (generation of random arrays and looping or partial array generation
+# won't generate the same results). NAAAAAAAH. This is probably a mistake,
+# check this and make a test to confirm ; first check this at low-level
+# (numpy.random), then in my code.
+
 class Universe: # actually, looks like a random VECTOR, the only one in town so far. Funny :)
-    def __call__(self, omega=None):
-        if omega is not None:
-            return omega
-        else:
-            return self.rng.uniform(size=self.n)
+    # I am going to break this, by replacing the omega argument (useless), with
+    # a size
+    def __call__(self, size=None):
+        if size is None:
+            output_size = (self.n,)
+        elif isinstance(size, int):
+            output_size = (self.n, size)
+        else: # tuple -- TODO check
+            output_size = (self.n,) + size
+        return self.rng.uniform(size=output_size)
+
 
 # TODO : need to make all distributions universe-dependent ? Urk :(
 # Or single universe at a time ? And maybe a with construct ? So that
@@ -146,8 +165,7 @@ class Uniform(RandomVariable):
         Omega.n += 1
         self.low = randomize(low)
         self.high = randomize(high)
-    def __call__(self, omega=None):
-        omega = Omega(omega)
+    def __call__(self, omega):
         u_n = omega[self.n] # localized abstraction leak HERE.
         return self.low(omega) * (1 - u_n) + self.high(omega) * u_n
 
@@ -155,8 +173,7 @@ class Bernoulli(RandomVariable):
     def __init__(self, p=0.5):
         self.U = Uniform()
         self.P = randomize(p)
-    def __call__(self, omega=None):
-        omega = Omega(omega)
+    def __call__(self, omega):
         u = self.U(omega)
         p = self.P(omega)
         return u <= p
@@ -166,7 +183,7 @@ class Normal(RandomVariable):
         self.U = Uniform()
         self.mu = randomize(mu)
         self.sigma = randomize(sigma)
-    def __call__(self, omega=None):
+    def __call__(self, omega):
         u = self.U(omega)
         mu = self.mu(omega)
         sigma = self.sigma(omega)
@@ -176,7 +193,7 @@ class Exponential(RandomVariable):
     def __init__(self, lambda_=1.0):
         self.U = Uniform()
         self.lambda_ = randomize(lambda_)
-    def __call__(self, omega=None):
+    def __call__(self, omega):
         u = self.U(omega)
         lambda_ = self.lambda_(omega)
         return - np.log(1 - u) / lambda_
@@ -207,8 +224,7 @@ def function(wrapped, instance, args, kwargs):
             # Does it work by default ?
             self.args = [randomize(arg) for arg in args]
             self.kwargs = {k: randomize(v) for k, v in kwargs.items()}
-        def __call__(self, omega=None):
-            omega = Omega(omega) # manage u = None
+        def __call__(self, omega):
             args_values = [arg(omega) for arg in self.args]
             kwargs_values = {k: v(omega) for k, v in kwargs.items()}
             return wrapped(*args_values, **kwargs_values)
