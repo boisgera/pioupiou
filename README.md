@@ -3,12 +3,22 @@ Pioupiou
 
 [![test](https://github.com/boisgera/pioupiou/actions/workflows/test.yml/badge.svg)](https://github.com/boisgera/pioupiou/actions/workflows/test.yml)
 
+:warning: *Alpha software!* :warning:
+
     >>> import numpy as np
     >>> from pioupiou import *
 
 **TODO.** Start with the random variables, talk about the universe later.
 **Update.** Nope ; the new explicit parametrization of RV that enables
 array support *requires* an explicit universe.
+
+
+Getting started
+--------------------------------------------------------------------------------
+
+Install the latest version with:
+
+    $ pip install --upgrade git+https://github.com/boisgera/pioupiou.git
 
 Random Variables
 --------------------------------------------------------------------------------
