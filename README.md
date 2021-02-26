@@ -24,9 +24,6 @@ and to simulate them :
 
 ![data](images/xy.svg)
 
-Pioupiou does **not** perform inference.
-
-
 Getting started
 --------------------------------------------------------------------------------
 
