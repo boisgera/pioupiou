@@ -20,5 +20,8 @@ jobs:
           activate-environment: pioupiou
           environment-file: environment.yml
 
+      - name: Install pioupiou
+        run: pip install .
+
       - name: Test pioupiou
         run: ./test -v

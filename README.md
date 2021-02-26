@@ -14,10 +14,10 @@ Use it to define probabilistic models :
     >>> E = pp.Normal(0.0, 0.1)
     >>> Y = a * X + b + E
 
-and to simulate them 
+and to simulate them :
 
     >>> omega = pp.Omega(1000) 
-    >>> y = Y(omega)
+    >>> x, y = X(omega), Y(omega)
     >>> import numpy as np
     >>> print(f"mean: {np.mean(y)}, standard deviation: {np.std(y)}")
     mean: 1.251797184838589, standard deviation: 0.17495442218641913
