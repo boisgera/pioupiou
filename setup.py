@@ -2,7 +2,7 @@ import setuptools
 
 options = dict(
     name = "boisgera-pioupiou",
-    version = "0.0a8",
+    version = "0.0a9",
     license = "MIT License",
     description = "A nano probabilistic programming language for Python",
     author = "Sébastien Boisgérault",
@@ -18,7 +18,7 @@ options = dict(
 )
 
 with open("README.md", "r", encoding="utf-8") as README:
-    options["long_description"] = README.read().replace(":baby_chick:", "")
+    options["long_description"] = README.read()
 options["long_description_content_type"] = "text/markdown"
 
 options["packages"] = setuptools.find_packages()
