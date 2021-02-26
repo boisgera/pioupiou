@@ -4,12 +4,25 @@ Pioupiou
 [![test](https://github.com/boisgera/pioupiou/actions/workflows/test.yml/badge.svg)](https://github.com/boisgera/pioupiou/actions/workflows/test.yml)
 ![stage](https://img.shields.io/badge/stage-pre--alpha-red) 
 
-Misc. TODO, notes
---------------------------------------------------------------------------------
+Pioupiou is a nano probabilistic programming language embedded in Python.
+That means that you can define probabilistic models 
 
-**TODO.** Start with the random variables, talk about the universe later.
-**Update.** Nope ; the new explicit parametrization of RV that enables
-array support *requires* an explicit universe.
+    >>> import pioupiou as pp
+    >>> a, b = 0.5, 1.0
+    >>> X = pp.Uniform(0.0, 1.0)
+    >>> E = pp.Normal(0.0, 0.1)
+    >>> Y = a * X + b + E
+
+and simulate them :
+
+    >>> omega = pp.Omega(100) 
+    >>> y = Y(omega)
+    >>> import numpy as np
+    >>> print(f"mean: {np.mean(y)}, standard deviation: {np.std(y)}")
+    mean: 1.284061988431717, standard deviation: 0.20734128840870983
+
+Pioupiou does **not** perform inference.
+
 
 Getting started
 --------------------------------------------------------------------------------
@@ -172,3 +185,10 @@ to get an `omega`
     >>> omega = Omega(10)
     >>> B(omega) # doctest: +NORMALIZE_WHITESPACE
     array([ True, False, False, False, True, True, True, True, True, True])
+
+Misc. TODO, notes
+--------------------------------------------------------------------------------
+
+**TODO.** Start with the random variables, talk about the universe later.
+**Update.** Nope ; the new explicit parametrization of RV that enables
+array support *requires* an explicit universe.
