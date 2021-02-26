@@ -41,8 +41,10 @@ Install the latest version of pioupiou with:
     $ pip install --upgrade git+https://github.com/boisgera/pioupiou.git
 
 
+Misc API Tests 
+================================================================================
 
---------------------------------------------------------------------------------
+**Warning:** the interface is unstable
 
 
     >>> from pioupiou import *
