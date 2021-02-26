@@ -4,6 +4,7 @@ channels:
 dependencies:
   - python=3.8
   - setuptools
+  - twine
   - numpy
   - scipy
   - pandas

@@ -16,7 +16,8 @@ Use it to define probabilistic models :
 
 and to simulate them :
 
-    >>> omega = pp.Omega(1000) 
+    >>> n = 1000 # number of samples
+    >>> omega = pp.Omega(n)
     >>> x, y = X(omega), Y(omega)
     >>> x # doctest: +ELLIPSIS
     array([6.36961687e-01, 2.69786714e-01, 4.09735239e-02, 1.65276355e-02, ...
