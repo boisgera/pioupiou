@@ -4,8 +4,9 @@ Pioupiou
 [![test](https://github.com/boisgera/pioupiou/actions/workflows/test.yml/badge.svg)](https://github.com/boisgera/pioupiou/actions/workflows/test.yml)
 ![stage](https://img.shields.io/badge/stage-pre--alpha-red) 
 
-Pioupiou is a nano probabilistic programming language embedded in Python.
-That means that you can define probabilistic models 
+Pioupiou is a nano probabilistic programming language, embedded into Python.
+
+Use it to define probabilistic models :
 
     >>> import pioupiou as pp
     >>> a, b = 0.5, 1.0
@@ -13,13 +14,13 @@ That means that you can define probabilistic models
     >>> E = pp.Normal(0.0, 0.1)
     >>> Y = a * X + b + E
 
-and simulate them :
+and to simulate them 
 
-    >>> omega = pp.Omega(100) 
+    >>> omega = pp.Omega(1000) 
     >>> y = Y(omega)
     >>> import numpy as np
     >>> print(f"mean: {np.mean(y)}, standard deviation: {np.std(y)}")
-    mean: 1.284061988431717, standard deviation: 0.20734128840870983
+    mean: 1.251797184838589, standard deviation: 0.17495442218641913
 
 Pioupiou does **not** perform inference.
 
