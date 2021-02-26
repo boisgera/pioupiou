@@ -1,9 +1,9 @@
 Pioupiou
 ================================================================================
 
-[![test](https://github.com/boisgera/pioupiou/actions/workflows/test.yml/badge.svg)](https://github.com/boisgera/pioupiou/actions/workflows/test.yml)
+[![test](https://github.com/boisgera/pioupiou/actions/workflows/test.yml/badge.svg)](https://github.com/boisgera/pioupiou/actions/workflows/test.yml)![stage](https://img.shields.io/badge/stage-pre--alpha-red) 
 
-:warning: *Alpha software!* :warning:
+
 
     >>> import numpy as np
     >>> from pioupiou import *
