@@ -18,9 +18,16 @@ Install the latest version of pioupiou with:
 
     $ pip install --upgrade git+https://github.com/boisgera/pioupiou.git
 
+Then use the library in Python with
+
+    >>> import pioupiou as pp
+
+
+
+--------------------------------------------------------------------------------
+
 
     >>> from pioupiou import *
-
 
 Random Variables
 --------------------------------------------------------------------------------
