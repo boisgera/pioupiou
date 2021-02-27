@@ -138,6 +138,9 @@ class RandomVariable(abc.ABC):
 # being that you cannot output anything from __bool__ but a true bool ...
 # Ah, ok, I get it : the decoration merely delays the test evaluation, 
 # but the code of randomized functions only see "true" deterministic values ...
+# This is a trick that should be carefully documented : "wrapping" the tests
+# into randomized function will allow use to use random variables in tests.
+
 
 @wrapt.decorator
 def function(wrapped, instance, args, kwargs):
