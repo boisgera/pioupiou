@@ -26,6 +26,9 @@ jobs:
       - name: Test pioupiou
         run: python test.py -v
 
+      - name: Compute coverage
+        run: echo "COVERAGE=`./coverage.sh`"" >> $GITHUB_ENV
+
       - name: Create coverage badge
         if: matrix.os == 'ubuntu-20.04'
         uses: schneegans/dynamic-badges-action@v1.0.0
@@ -34,5 +37,5 @@ jobs:
           gistID: 13615cd4d2f090624f8fa068f29d67f9
           filename: test.json
           label: Hello
-          message: World
+          message: ${{ env.COVERAGE }}
           color: orange
