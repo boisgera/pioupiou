@@ -162,7 +162,7 @@ def function(wrapped, instance, args, kwargs):
     return Deterministic(*args, **kwargs)
 
 # # Using the bool function is fine (as long as the result is not used in tests)
-# bool = function(builtins.bool)
+bool = function(builtins.bool)
 
 class Constant(RandomVariable):
     def __init__(self, value):

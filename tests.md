@@ -6,6 +6,7 @@ Misc API Tests
 
 
     >>> from pioupiou import *
+    >>> import pioupiou as pp
     >>> import numpy as np
 
 Random Variables
@@ -149,12 +150,52 @@ to get an `omega`
     array([-2.67964357, -1.6123583 , -1.08362588, -1.03332843, -3.28794896,
            -3.6586339 , -2.58127852, -2.99115835, -2.38277811, -3.74450529])
 
+    >>> pp.restart()
+    >>> U = pp.Uniform()
+    >>> import builtins
+    >>> V = builtins.bool(U) # doctest: +ELLIPSIS
+    Traceback (most recent call last):
+    ...
+    TypeError: ...
+    >>> V = pp.bool(U)
+
     >>> restore()
     >>> U1 = Uniform()
     >>> B = (U1 >= 1/3)
     >>> omega = Omega(10)
     >>> B(omega) # doctest: +NORMALIZE_WHITESPACE
     array([ True, False, False, False, True, True, True, True, True, True])
+
+    >>> pp.restart()
+    >>> U, C = Uniform(), Constant(1.0)
+    >>> T1 = (U <= 1.0)
+    >>> T2 = (1.0 < U)
+    >>> T3 = (U <= C)
+    >>> T4 = (U < 1.0)
+    >>> T5 = (1.0 <= U)
+    >>> omega = Omega()
+    >>> T1(omega)
+    True
+    >>> T1(omega) == (not T2(omega))
+    True
+    >>> T1(omega) == T3(omega)
+    True
+    >>> T4(omega) == (not T5(omega))
+    True
+
+    >>> pp.restart()
+    >>> X, Y = Uniform(), Uniform()
+    >>> W = (X == Y)
+    >>> Z = (X != Y) 
+    >>> omega = Omega()
+    >>> X(omega), Y(omega)
+    (0.6369616873214543, 0.2697867137638703)
+    >>> W(omega), Z(omega)
+    (False, True)
+    >>> W(omega) != Z(omega)
+    True
+
+
 
 Operators
 --------------------------------------------------------------------------------
