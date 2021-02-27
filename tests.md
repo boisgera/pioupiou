@@ -221,6 +221,27 @@ Universe reboot & restore
     >>> x2 == x3
     True
     
+Distributions
+--------------------------------------------------------------------------------
+
+    >>> import pioupiou as pp; pp.restart()
+
+    >>> B = Bernoulli()
+    >>> omega = Omega(5)
+    >>> B(omega)
+    array([False,  True,  True,  True, False])
+
+    >>> pp.restart()
+    >>> B = Bernoulli(0.5)
+    >>> omega = Omega(5)
+    >>> B(omega)
+    array([False,  True,  True,  True, False])
+
+    >>> B = Bernoulli(1.0)
+    >>> omega = Omega(5)
+    >>> B(omega)
+    array([ True,  True,  True,  True,  True])
+
 Constants
 --------------------------------------------------------------------------------
 
