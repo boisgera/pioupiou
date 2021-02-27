@@ -24,4 +24,4 @@ jobs:
         run: pip install .
 
       - name: Test pioupiou
-        run: ./test -v
+        run: python test.py -v
