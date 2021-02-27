@@ -68,55 +68,55 @@ def save():
 # ------------------------------------------------------------------------------
 
 # TODO: these functions already exist in the operator module, don't redeclare them.
-def __add__(x, y):
-    return x + y
+# def __add__(x, y):
+#     return x + y
 
-def __mul__(x, y):
-    return x * y
+# def __mul__(x, y):
+#     return x * y
 
-def __sub__(x, y):
-    return x - y
+# def __sub__(x, y):
+#     return x - y
 
-def __rsub__(x, y):
-    return y - x
+# def __rsub__(x, y):
+#     return y - x
 
-def __div__(x, y):
-    return x / y
+# def __div__(x, y):
+#     return x / y
 
-def __rdiv__(x, y):
-    return y / x
+# def __rdiv__(x, y):
+#     return y / x
 
-def __pos__(x):
-    return x
+# def __pos__(x):
+#     return x
 
-def __neg__(x):
-    return - x
+# def __neg__(x):
+#     return - x
 
-def __bool__(x):
-    return bool(x)
+# def __bool__(x):
+#     return bool(x)
 
 class RandomVariable:
     def __call__(omega):
         raise NotImplementedError()
     # Binary operators
     def __add__(self, other):
-        return function(__add__)(self, other) # wrapped each and every time ? This is ugly.
+        return function(operator.add)(self, other) # wrapped each and every time ? This is ugly.
         # at the moment I can't make it work otherwise. Probably because I don't understand
         # what wrapt is doing, I should probably get rid of it.
         # There is at least one level of nesting I can get rid of (the decoration
         # can be done at class definition time and the result stored in it).
     __radd__ = __add__
     def __sub__(self, other):
-        return function(__sub__)(self, other)
+        return function(operator.sub)(self, other)
     def __rsub__(self, other):
-        return function(__rsub__)(self, other)
+        return function(operator.sub)(other, self)
     def __mul__(self, other):
-        return function(__mul__)(self, other)
+        return function(operator.mul)(self, other)
     __rmul__ = __mul__
     def __div__(self, other):
-        return function(__div__)(self, other)
+        return function(operator.div)(self, other)
     def __rdiv__(self, other):
-        return function(__div__)(self, other)
+        return function(operator.div)(other, self)
     # TODO: divmod, pow, lshift, rshift, and, xor, or
 
     def __lt__(self, other):
@@ -134,11 +134,11 @@ class RandomVariable:
 
     # Unary operators
     def __neg__(self):
-        return function(__neg__)(self)
+        return function(operator.neg)(self)
     def __pos__(self):
-        return function(__pos__)(self)
+        return function(operator.pos)(self)
     def __bool__(self):
-        return function(__bool__)(self)
+        return function(bool)(self)
     # TODO : abs, invert, complex, int, long, float, oct, hex.
 
 def randomize(value):
