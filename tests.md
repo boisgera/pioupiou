@@ -195,17 +195,6 @@ Operators
     >>> (5.0 // Constant(2.0))(omega)
     2.0
 
-
-Vectorization
---------------------------------------------------------------------------------
-
-    >>> import pioupiou as pp; pp.restart()
-    >>> X = pp.Uniform()
-    >>> omega = pp.Omega((2,3))
-    >>> X(omega)
-    array([[0.63696169, 0.26978671, 0.04097352],
-           [0.01652764, 0.81327024, 0.91275558]])
-
 Universe reboot & restore
 --------------------------------------------------------------------------------
 
@@ -264,6 +253,41 @@ parameters, it is the most consistent choice.
     >>> X(omega) == C(omega)
     True
 
+
+Vectorization
+--------------------------------------------------------------------------------
+
+Pioupiou supports vectors (NumPy arrays) of (independent) samples :
+
+    >>> pp.restart()
+
+A call to `Omega` without arguments generate a single sample `omega`.
+
+    >>> X = pp.Uniform()
+    >>> omega = pp.Omega()
+    >>> X(omega)
+    0.6369616873214543
+
+With an integer size instead, you get one-dimensional arrays of samples :
+
+    >>> omega = pp.Omega(1)
+    >>> X(omega)
+    array([0.26978671])
+    >>> omega = pp.Omega(2)
+    >>> X(omega)
+    array([0.04097352, 0.01652764])
+
+Arbitrary shapes are possible with a tuple size :
+
+    >>> omega = pp.Omega((2,))
+    >>> X(omega)
+    array([0.81327024, 0.91275558])
+    >>> omega = pp.Omega((2,3))
+    >>> X(omega)
+    array([[0.60663578, 0.72949656, 0.54362499],
+           [0.93507242, 0.81585355, 0.0027385 ]])
+
+
 🎉 Randomize Everything!
 --------------------------------------------------------------------------------
 
@@ -307,3 +331,71 @@ or even a mix of deterministic and random values :
     >>> omega = Omega()
     >>> Z(omega) == X(omega) + 2.0
     True
+
+
+### Randomization meets Vectorization
+
+If you want to keep pioupiou happy and working for you, only randomize functions 
+that accept NumPy arrays (of consistent sizes). If your function doesn't do that
+by default, use the `vectorize` decorator provided by NumPy before you 
+randomize them. 🐥 Please !
+
+    >>> pp.restart()
+    >>> X, Y = pp.Uniform(), pp.Uniform()
+
+So don't do
+
+    >>> @pp.randomize
+    ... def max(x, y):
+    ...     if x <= y:
+    ...         return y
+    ...     else:
+    ...         return x
+    >>> Z = max(X, Y)
+
+unless you want to break everything :
+
+    >>> omega = pp.Omega()
+    >>> Z(omega)
+    0.6369616873214543
+    >>> omega = pp.Omega(10)
+    >>> Z(omega) # doctest: +ELLIPSIS
+    Traceback (most recent call last):
+    ...
+    ValueError: ...
+
+But instead do :
+
+    >>> pp.restart()
+    >>> X, Y = pp.Uniform(), pp.Uniform()
+    >>> import numpy as np
+    >>> @pp.randomize
+    ... @np.vectorize
+    ... def max(x, y):
+    ...     if x <= y:
+    ...         return y
+    ...     else:
+    ...         return x
+    >>> Z = max(X, Y)
+
+
+It will work as expected :
+
+    >>> omega = pp.Omega(10)
+    >>> X(omega)
+    array([0.63696169, 0.26978671, 0.04097352, 0.01652764, 0.81327024,
+           0.91275558, 0.60663578, 0.72949656, 0.54362499, 0.93507242])
+    >>> Y(omega)
+    array([0.81585355, 0.0027385 , 0.85740428, 0.03358558, 0.72965545,
+           0.17565562, 0.86317892, 0.54146122, 0.29971189, 0.42268722])
+    >>> Z(omega)
+    array([0.81585355, 0.26978671, 0.85740428, 0.03358558, 0.81327024,
+           0.91275558, 0.86317892, 0.72949656, 0.54362499, 0.93507242])
+    >>> all(max(X(omega), Y(omega)) == Z(omega))
+    True
+
+
+TODO: document somewhere that additional random variables can make the universe
+"grow" and make samples of omega obsolete. The safe way to proceed is to 
+model EVERYTHING and then to sample (and of course, adding random variables
+that depend deterministically on random variables is OK too).

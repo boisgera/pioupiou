@@ -1,5 +1,6 @@
 # Python 3 Standard Library
 import abc
+import builtins
 import inspect
 import operator
 
@@ -121,9 +122,42 @@ class RandomVariable(abc.ABC):
         return function(operator.neg)(self)
     def __pos__(self):
         return function(operator.pos)(self)
+
+    # **BUG** won't work ... This is structural : __bool__ must return a bool.
+    # This limitation should be documented ; this is tricky. You cannot randomize
+    # a function that tests boolean outputs. Of course, you can still write it
+    # in the low-level form, randomize the input yourself, do the sampling based
+    # on the argument omega and THEN test on the samples.
     def __bool__(self):
-        return function(bool)(self)
+        # return function(builtins.bool)(self) # this is probably very borked, right ?
+        raise TypeError("you cannot use a random value where a boolean is required")
     # TODO : abs, invert, complex, int, long, float, oct, hex.
+
+# Mmm I don't really understand of `np.vectorize` can make functions with test
+# (apparently) work ... I have to give it some thought :). The bottom line
+# being that you cannot output anything from __bool__ but a true bool ...
+
+@wrapt.decorator
+def function(wrapped, instance, args, kwargs):
+    # if instance is not None: # Nah, forget about this ATM
+    #     args = [instance] + list(args)
+    all_args = list(args) + list(kwargs.values())
+    if not any(isinstance(arg, RandomVariable) for arg in all_args):
+        return wrapped(*args, **kwargs)
+    class Deterministic(RandomVariable):
+        def __init__ (self, *args, **kwargs): # TODO: I'd like these args and 
+            # kwargs to have wrapped signature and be checked against it ...
+            # Does it work by default ?
+            self.args = [randomize(arg) for arg in args]
+            self.kwargs = {k: randomize(v) for k, v in kwargs.items()}
+        def __call__(self, omega):
+            args_values = [arg(omega) for arg in self.args]
+            kwargs_values = {k: v(omega) for k, v in kwargs.items()}
+            return wrapped(*args_values, **kwargs_values)
+    return Deterministic(*args, **kwargs)
+
+# Using the bool function is fine (as long as the result is not used in tests)
+bool = function(builtins.bool)
 
 class Constant(RandomVariable):
     def __init__(self, value):
@@ -188,26 +222,6 @@ class Cauchy(RandomVariable):
         return x0 + gamma * np.tan(np.pi * (u - 0.5))
 
 # ------------------------------------------------------------------------------
-
-@wrapt.decorator
-def function(wrapped, instance, args, kwargs):
-    # if instance is not None: # Nah, forget about this ATM
-    #     args = [instance] + list(args)
-    all_args = list(args) + list(kwargs.values())
-    if not any(isinstance(arg, RandomVariable) for arg in all_args):
-        return wrapped(*args, **kwargs)
-    class Deterministic(RandomVariable):
-        def __init__ (self, *args, **kwargs): # TODO: I'd like these args and 
-            # kwargs to have wrapped signature and be checked against it ...
-            # Does it work by default ?
-            self.args = [randomize(arg) for arg in args]
-            self.kwargs = {k: randomize(v) for k, v in kwargs.items()}
-        def __call__(self, omega):
-            args_values = [arg(omega) for arg in self.args]
-            kwargs_values = {k: v(omega) for k, v in kwargs.items()}
-            return wrapped(*args_values, **kwargs_values)
-    return Deterministic(*args, **kwargs)
-
 for name in dir(np):
     item = getattr(np, name)
     if isinstance(item, np.ufunc):
