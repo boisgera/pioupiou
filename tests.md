@@ -221,6 +221,27 @@ Universe reboot & restore
     >>> x2 == x3
     True
     
+Constants
+--------------------------------------------------------------------------------
+
+    >>> import pioupiou as pp; pp.restart()
+
+Constant distributions :
+
+    >>> C = Constant(np.pi)
+    >>> omega = Omega()
+    >>> C(omega)
+    3.141592653589793
+
+Yes, you can randomize a constant random variable ! 😀
+This is a bit silly, but since we want to be able to randomize all distribution
+parameters, it is the most consistent choice.
+
+    >>> X = pp.Uniform()
+    >>> C = Constant(X)
+    >>> omega = Omega()
+    >>> X(omega) == C(omega)
+    True
 
 Misc. TODO, notes
 --------------------------------------------------------------------------------
