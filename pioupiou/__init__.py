@@ -125,12 +125,6 @@ class RandomVariable(abc.ABC):
         return function(bool)(self)
     # TODO : abs, invert, complex, int, long, float, oct, hex.
 
-def randomize(value):
-    if isinstance(value, RandomVariable):
-        return value
-    else:
-        return Constant(value)
-
 class Constant(RandomVariable):
     def __init__(self, value):
         # Yep, the value of a constant can be randomized too.
@@ -218,3 +212,11 @@ for name in dir(np):
     item = getattr(np, name)
     if isinstance(item, np.ufunc):
         globals()[name] = function(item)
+
+def randomize(item):
+    if isinstance(item, RandomVariable):
+        return item
+    elif callable(item):
+        return function(item)
+    else:
+        return Constant(item)

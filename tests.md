@@ -264,10 +264,46 @@ parameters, it is the most consistent choice.
     >>> X(omega) == C(omega)
     True
 
-Misc. TODO, notes
+🎉 Randomize Everything!
 --------------------------------------------------------------------------------
 
-**TODO.** Start with the random variables, talk about the universe later.
-**Update.** Nope ; the new explicit parametrization of RV that enables
-array support *requires* an explicit universe.
+Constants, random variables, functions, etc.
 
+    >>> pp.restart()
+
+The `randomize` function turns constant values into (constant) random variables :
+
+    >>> c = 1.0
+    >>> C = randomize(1.0)
+    >>> omega = Omega()
+    >>> C(omega) == c
+    True
+
+Obviously, randomizing a random variable doesn't do anything :
+
+    >>> U = Uniform()
+    >>> X = randomize(U)
+    >>> omega = Omega()
+    >>> X(omega) == U(omega)
+    True
+
+Randomizing a function makes it able to take random variables as inputs ;
+it then produces a random variable :
+
+    >>> @randomize
+    ... def sum(x, c):
+    ...     return x + c
+    >>> Y = sum(X, C)
+    >>> omega = Omega()
+    >>> Y(omega) == X(omega) + C(omega)
+    True
+
+The randomized function can still accept fixed (non-random) values 
+or even a mix of deterministic and random values :
+
+    >>> sum(1.0, 2.0) 
+    3.0
+    >>> Z = sum(X, 2.0)
+    >>> omega = Omega()
+    >>> Z(omega) == X(omega) + 2.0
+    True
