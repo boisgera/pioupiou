@@ -218,16 +218,3 @@ for name in dir(np):
     item = getattr(np, name)
     if isinstance(item, np.ufunc):
         globals()[name] = function(item)
-
-
-if False:
-    import matplotlib.pyplot as pp
-    import scipy.stats as ss
-    U = Uniform()
-    data = [U() for _ in range(10000)]
-    #print(data)
-    pp.hist(data, bins=100, range=(-2,2), density=True, color="blue", alpha=0.25)
-    kernel = ss.gaussian_kde(data)
-    x = np.arange(-2, 2, 0.01)
-    pp.plot(x, kernel(x), color="blue")
-    pp.show()
