@@ -27,7 +27,7 @@ jobs:
         run: python test.py -v
 
       - name: Compute coverage
-        run: echo "COVERAGE=`./coverage.sh`"" >> $GITHUB_ENV
+        run: echo "COVERAGE=`./coverage.sh`" >> $GITHUB_ENV
 
       - name: Create coverage badge
         if: matrix.os == 'ubuntu-20.04'
