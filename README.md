@@ -4,9 +4,7 @@ Pioupiou 🐤
 [![test](https://github.com/boisgera/pioupiou/actions/workflows/test.yml/badge.svg)](https://github.com/boisgera/pioupiou/actions/workflows/test.yml)
 ![stage](https://img.shields.io/badge/stage-pre--alpha-red) 
 
-<!--
 ![badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/boisgera/13615cd4d2f090624f8fa068f29d67f9/raw/test.json)
--->
 
 Pioupiou is a nano probabilistic programming language, embedded into Python.
 
