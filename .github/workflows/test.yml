@@ -25,3 +25,13 @@ jobs:
 
       - name: Test pioupiou
         run: python test.py -v
+
+      - name: Create coverage badge
+        uses: schneegans/dynamic-badges-action@v1.0.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: 13615cd4d2f090624f8fa068f29d67f9
+          filename: test.json
+          label: Hello
+          message: World
+          color: orange
