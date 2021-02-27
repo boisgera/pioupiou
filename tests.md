@@ -281,7 +281,25 @@ Distributions
     >>> np.std(n)
     0.09904019518744091
 
+### Exponential
 
+    >>> pp.restart()
+    >>> E = pp.Exponential()
+    >>> omega = pp.Omega()
+    >>> E(omega)
+    1.013246905717726
+
+    >>> pp.restart()
+    >>> E = pp.Exponential(1.0)
+    >>> omega = pp.Omega()
+    >>> E(omega)
+    1.013246905717726
+
+    >>> pp.restart()
+    >>> E = pp.Exponential(2.0)
+    >>> omega = pp.Omega(1000)
+    >>> np.mean(E(omega))
+    0.5170714017411246
 
 Constants
 --------------------------------------------------------------------------------
