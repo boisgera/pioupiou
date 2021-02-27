@@ -301,6 +301,26 @@ Distributions
     >>> np.mean(E(omega))
     0.5170714017411246
 
+### Cauchy
+
+    >>> pp.restart()
+    >>> C = pp.Cauchy()
+    >>> omega = pp.Omega()
+    >>> C(omega)
+    0.4589573340936978
+    
+    >>> pp.restart()
+    >>> C = pp.Cauchy(0.0, 1.0)
+    >>> omega = pp.Omega()
+    >>> C(omega)
+    0.4589573340936978
+
+    >>> pp.restart()
+    >>> C = pp.Cauchy(3.0, 2.0)
+    >>> omega = pp.Omega(1000)
+    >>> np.median(C(omega))    
+    3.181434516919701
+
 Constants
 --------------------------------------------------------------------------------
 
