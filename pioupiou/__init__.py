@@ -136,6 +136,8 @@ class RandomVariable(abc.ABC):
 # Mmm I don't really understand of `np.vectorize` can make functions with test
 # (apparently) work ... I have to give it some thought :). The bottom line
 # being that you cannot output anything from __bool__ but a true bool ...
+# Ah, ok, I get it : the decoration merely delays the test evaluation, 
+# but the code of randomized functions only see "true" deterministic values ...
 
 @wrapt.decorator
 def function(wrapped, instance, args, kwargs):
@@ -156,8 +158,8 @@ def function(wrapped, instance, args, kwargs):
             return wrapped(*args_values, **kwargs_values)
     return Deterministic(*args, **kwargs)
 
-# Using the bool function is fine (as long as the result is not used in tests)
-bool = function(builtins.bool)
+# # Using the bool function is fine (as long as the result is not used in tests)
+# bool = function(builtins.bool)
 
 class Constant(RandomVariable):
     def __init__(self, value):
