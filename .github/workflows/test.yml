@@ -36,6 +36,6 @@ jobs:
           auth: ${{ secrets.GIST_SECRET }}
           gistID: 13615cd4d2f090624f8fa068f29d67f9
           filename: test.json
-          label: Hello
+          label: coverage
           message: ${{ env.COVERAGE }}
-          color: orange
+          color: blue
