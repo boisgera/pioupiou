@@ -395,7 +395,12 @@ It will work as expected :
     True
 
 
-TODO: document somewhere that additional random variables can make the universe
+**TODO:** document somewhere that additional random variables can make the universe
 "grow" and make samples of omega obsolete. The safe way to proceed is to 
 model EVERYTHING and then to sample (and of course, adding random variables
 that depend deterministically on random variables is OK too).
+
+**TODO.** After the randomization of functions that depends deterministically
+of their arguments, document the creation of components that inherit from
+`RandomVariable` and can grow the universe (do NOT merely depend on their
+arguments, but also on some hidden, random source).
