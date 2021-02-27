@@ -1,4 +1,5 @@
 # Python 3 Standard Library
+import abc
 import inspect
 import operator
 
@@ -52,52 +53,26 @@ Omega = Universe() # the universe (as long as we sample the variables only once 
 
 def restore(snapshot=None):
     if snapshot is None:
-        snapshot = (0, 0)
-    n, state = snapshot
-    Omega.ss = np.random.SeedSequence(state)
-    Omega.rng = npr.default_rng(Omega.ss)
-    Omega.n = n        
+        Omega.n = 0
+        seed = 0
+        Omega.ss = np.random.SeedSequence(seed)
+        Omega.rng = npr.default_rng(Omega.ss)
+    else:
+        restore()
+        n, state = snapshot
+        Omega.n = n
+        Omega.rng.bit_generator.state = state
+
 
 restart = restore
 restore()
 
 def save():
-    snapshot = (Omega.n, Omega.ss.entropy)
+    snapshot = (Omega.n, Omega.rng.bit_generator.state)
     return snapshot
 
 # ------------------------------------------------------------------------------
-
-# TODO: these functions already exist in the operator module, don't redeclare them.
-# def __add__(x, y):
-#     return x + y
-
-# def __mul__(x, y):
-#     return x * y
-
-# def __sub__(x, y):
-#     return x - y
-
-# def __rsub__(x, y):
-#     return y - x
-
-# def __div__(x, y):
-#     return x / y
-
-# def __rdiv__(x, y):
-#     return y / x
-
-# def __pos__(x):
-#     return x
-
-# def __neg__(x):
-#     return - x
-
-# def __bool__(x):
-#     return bool(x)
-
-class RandomVariable:
-    def __call__(omega):
-        raise NotImplementedError()
+class RandomVariable(abc.ABC):
     # Binary operators
     def __add__(self, other):
         return function(operator.add)(self, other) # wrapped each and every time ? This is ugly.
@@ -105,6 +80,11 @@ class RandomVariable:
         # what wrapt is doing, I should probably get rid of it.
         # There is at least one level of nesting I can get rid of (the decoration
         # can be done at class definition time and the result stored in it).
+        #
+        # TODO: 
+        #   - get rid of wrapt
+        #   - automate
+        #   - unroll the calls
     __radd__ = __add__
     def __sub__(self, other):
         return function(operator.sub)(self, other)
@@ -113,10 +93,14 @@ class RandomVariable:
     def __mul__(self, other):
         return function(operator.mul)(self, other)
     __rmul__ = __mul__
-    def __div__(self, other):
-        return function(operator.div)(self, other)
-    def __rdiv__(self, other):
-        return function(operator.div)(other, self)
+    def __truediv__(self, other):
+        return function(operator.truediv)(self, other)
+    def __rtruediv__(self, other):
+        return function(operator.truediv)(other, self)
+    def __floordiv__(self, other):
+        return function(operator.floordiv)(self, other)
+    def __rfloordiv__(self, other):
+        return function(operator.floordiv)(other, self)
     # TODO: divmod, pow, lshift, rshift, and, xor, or
 
     def __lt__(self, other):

@@ -152,9 +152,80 @@ to get an `omega`
     >>> B(omega) # doctest: +NORMALIZE_WHITESPACE
     array([ True, False, False, False, True, True, True, True, True, True])
 
+Operators
+--------------------------------------------------------------------------------
+
+    >>> import pioupiou as pp; pp.restart()
+
+    >>> X, Y, Z = pp.Constant(1.0), pp.Constant(2.0), pp.Constant(4.0)
+    >>> omega = Omega()
+
+    >>> (X + Y)(omega)
+    3.0
+    >>> (X + 2.0)(omega)
+    3.0
+    >>> (2.0 + X)(omega)
+    3.0
+
+    >>> (X - Y)(omega)
+    -1.0
+    >>> (X - 2.0)(omega)
+    -1.0
+    >>> (2.0 - X)(omega)
+    1.0
+
+    >>> (Y * Z)(omega)
+    8.0
+    >>> (Y * 4.0)(omega)
+    8.0
+    >>> (4.0 * Y)(omega)
+    8.0
+
+    >>> (X / Y)(omega)
+    0.5
+    >>> (X / 2.0)(omega)
+    0.5
+    >>> (1.0 / Y)(omega)
+    0.5
+
+    >>> (Constant(5.0) // Constant(2.0))(omega)
+    2.0
+    >>> (5.0 // Constant(2.0))(omega)
+    2.0
+    >>> (5.0 // Constant(2.0))(omega)
+    2.0
+
+
+Vectorization
+--------------------------------------------------------------------------------
+
+    >>> import pioupiou as pp; pp.restart()
+    >>> X = pp.Uniform()
+    >>> omega = pp.Omega((2,3))
+    >>> X(omega)
+    array([[0.63696169, 0.26978671, 0.04097352],
+           [0.01652764, 0.81327024, 0.91275558]])
+
+Universe reboot & restore
+--------------------------------------------------------------------------------
+
+    >>> import pioupiou as pp; pp.restart()
+    >>> U = pp.Uniform()
+    >>> omega = pp.Omega()
+    >>> x1 = U(omega)
+    >>> state = pp.save()
+    >>> omega = pp.Omega()
+    >>> x2 = U(omega)
+    >>> pp.restart(state)
+    >>> x3 = U(omega)
+    >>> x2 == x3
+    True
+    
+
 Misc. TODO, notes
 --------------------------------------------------------------------------------
 
 **TODO.** Start with the random variables, talk about the universe later.
 **Update.** Nope ; the new explicit parametrization of RV that enables
 array support *requires* an explicit universe.
+

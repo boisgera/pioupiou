@@ -1,7 +1,12 @@
 .vscode
+
 __pycache__
 *.egg-info
 *.egg
 build
 dist
 *.swp
+
+# Coverage
+htmlcov
+.coverage
