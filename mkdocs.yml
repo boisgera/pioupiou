@@ -11,9 +11,9 @@ pages:
 theme:
   name: material
 
-plugins:
-  - search
-  - git-revision-date
+# plugins:
+#   - search
+#   - git-revision-date
 
 markdown_extensions:
   - admonition
