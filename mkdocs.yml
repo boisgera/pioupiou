@@ -11,8 +11,6 @@ theme: "material"
 
 theme:
   name: material
-  features:
-    - navigation.tabs
 
 markdown_extensions:
   - admonition
