@@ -6,10 +6,13 @@ site_dir: docs
 
 pages:
   - Overview: index.md
-  - Examples: examples.md
-
 
 theme: "material" 
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
 
 markdown_extensions:
   - admonition
