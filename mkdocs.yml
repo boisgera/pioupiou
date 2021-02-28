@@ -11,6 +11,9 @@ pages:
 theme:
   name: material
 
+plugins:
+  - git-revision-date
+
 markdown_extensions:
   - admonition
   - toc:
