@@ -2,7 +2,7 @@
 Misc API Tests 
 ================================================================================
 
-**Warning:** the interface is unstable
+**Warning:** this document is a very rough draft.
 
 
     >>> from pioupiou import *
