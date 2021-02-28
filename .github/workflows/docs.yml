@@ -1,4 +1,4 @@
-name: test
+name: docs
 on: [push]
 
 jobs:
