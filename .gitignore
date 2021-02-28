@@ -10,3 +10,6 @@ dist
 # Coverage
 htmlcov
 .coverage
+
+# Mkdocs
+docs

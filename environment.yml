@@ -3,6 +3,7 @@ channels:
   - conda-forge
 dependencies:
   - python=3.8
+  - pip
   - setuptools
   - twine
   - coverage
@@ -12,3 +13,6 @@ dependencies:
   - matplotlib
   - seaborn
   - wrapt
+  - pip:
+    - mkdocs
+    - mkdocs-material
