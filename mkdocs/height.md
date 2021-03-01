@@ -23,17 +23,12 @@ Display sex graphically:
     ...         return "♀"
     ...     else:
     ...         return "♂"
-
+ 
 Proportion of females:
 
     >>> proportion_female = 0.516
     >>> Is_female = pp.Bernoulli(proportion_female)
     >>> Sex_symbol = sex_symbol(Is_female)
-
-    >>> omega = pp.Omega(10)
-    >>> sexes = Sex_symbol(omega)
-    >>> print("".join(sexes))
-    ♂♀♀♀♂♂♂♂♂♂
 
 Distribution of heights, conditionned by the sex:
 
@@ -44,31 +39,19 @@ Distribution of heights, conditionned by the sex:
     >>> sigma_male = (189.0 - 162.0) / (2 * 1.96)
     >>> Height_male = pp.Normal(mu_male, sigma_male)
 
-Branching:
-
-    >>> @pp.randomize
-    ... @np.vectorize
-    ... def IF(condition, then_, else_):
-    ...     if condition:
-    ...         return then_
-    ...     else:
-    ...         return else_
-
 Combined height:
 
-    >>> Height = IF(Is_female, Height_female, Height_male)
-    >>> omega = pp.Omega(10)
-    >>> print("".join(Sex_symbol(omega)))
-    ♂♀♂♀♂♀♂♂♀♀
-    >>> Height_female(omega)
-    array([149.05760786, 154.04699223, 164.62923173, 164.20544312,
-           163.64590454, 159.73782054, 180.08229688, 175.43831704,
-           164.9052502 , 164.2639231 ])
-    >>> Height_male(omega)
-    array([177.7850035 , 172.45674883, 166.80543598, 178.44496236,
-           174.83803853, 170.98942569, 174.15539547, 182.8292959 ,
-           184.77709853, 171.89038855])
-    >>> Height(omega)
-    array([177.7850035 , 154.04699223, 166.80543598, 164.20544312,
-           174.83803853, 159.73782054, 174.15539547, 182.8292959 ,
-           164.9052502 , 164.2639231 ])
+    >>> Is_male = pp.logical_not(Is_female)
+    >>> Height = Is_female * Height_female + Is_male * Height_male
+
+Simulation:
+
+    >>> omega = pp.Omega(1000)
+    >>> Sex_symbol(omega) # doctest: +ELLIPSIS
+    array(['♂', '♀', '♀', '♀', '♂', '♂', '♂', '♂', '♂', '♂', '♂', '♀', ...)
+    >>> Height_female(omega) # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
+    array([146.93582968, 167.97025732, 161.63754187, 160.62997627, ...])
+    >>> Height_male(omega) # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
+    array([188.17949253, 163.69348513, 183.98172232, 170.37550933, ...])
+    >>> Height(omega) # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
+    array([188.17949253, 167.97025732, 161.63754187, 160.62997627, ...])
