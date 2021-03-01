@@ -27,6 +27,7 @@ jobs:
         run: python test.py -v
 
       - name: Build the images
+        if: matrix.os == 'ubuntu-20.04'
         run: cd mkdocs/images && ./build.py
 
       - name: Create coverage report
@@ -49,12 +50,15 @@ jobs:
           color: blue
 
       - name: Build documentation
+        if: matrix.os == 'ubuntu-20.04'
         run: mkdocs build
 
       - name: Prepare deployment
+        if: matrix.os == 'ubuntu-20.04'
         run: rm .gitignore
 
-      - name: Deploy documentations
+      - name: Deploy documentation
+        if: matrix.os == 'ubuntu-20.04'
         uses: JamesIves/github-pages-deploy-action@3.7.1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
