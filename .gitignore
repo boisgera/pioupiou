@@ -12,4 +12,5 @@ htmlcov
 .coverage
 
 # Mkdocs
+mkdocs/images/*.svg
 docs

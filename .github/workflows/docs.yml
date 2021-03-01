@@ -17,14 +17,14 @@ jobs:
           activate-environment: pioupiou
           environment-file: environment.yml
 
-      - name: Build documentation
-        run: mkdocs build
-
       - name: Install pioupiou
         run: pip install .
 
       - name: Build the images (pioupiou required)
-        run: cp -rf images docs && cd docs/images && ./build.py 
+        run: cd mkdocs/images && ./build.py
+
+      - name: Build documentation
+        run: mkdocs build
 
       - name: Prepare deployment
         run: rm .gitignore
