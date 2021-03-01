@@ -26,7 +26,14 @@ jobs:
       - name: Test pioupiou
         run: python test.py -v
 
-      - name: Compute coverage
+      - name: Build the images
+        run: cd mkdocs/images && ./build.py
+
+      - name: Create coverage report
+        if: matrix.os == 'ubuntu-20.04'
+        run: coverage run test.py && coverage html && cp -rf htmlcov mkdocs/.
+
+      - name: Compute coverage percentage
         if: matrix.os == 'ubuntu-20.04'
         run: echo "COVERAGE=`./coverage.sh`" >> $GITHUB_ENV
 
@@ -40,3 +47,18 @@ jobs:
           label: coverage
           message: ${{ env.COVERAGE }}
           color: blue
+
+      - name: Build documentation
+        run: mkdocs build
+
+      - name: Prepare deployment
+        run: rm .gitignore
+
+      - name: Deploy documentations
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: "docs"
+          SINGLE_COMMIT: true
+          PRESERVE: true
