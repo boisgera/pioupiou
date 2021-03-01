@@ -20,7 +20,10 @@ jobs:
       - name: Build documentation
         run: mkdocs build
 
-      - name: Build the images
+      - name: Install pioupiou
+        run: pip install .
+
+      - name: Build the images (pioupiou required)
         run: cp -rf images docs && cd docs/images && ./build.py 
 
       - name: Prepare deployment

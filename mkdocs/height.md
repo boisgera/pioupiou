@@ -55,3 +55,5 @@ Simulation:
     array([188.17949253, 163.69348513, 183.98172232, 170.37550933, ...])
     >>> Height(omega) # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
     array([188.17949253, 167.97025732, 161.63754187, 160.62997627, ...])
+
+![Height](images/height.svg)
