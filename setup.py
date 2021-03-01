@@ -2,7 +2,7 @@ import setuptools
 
 options = dict(
     name = "boisgera-pioupiou",
-    version = "0.0a10",
+    version = "0.0a11",
     license = "MIT License",
     description = "A nano probabilistic programming language for Python",
     author = "Sébastien Boisgérault",
