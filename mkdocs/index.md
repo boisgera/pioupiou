@@ -30,7 +30,7 @@ and to simulate them :
 
 That's about it! Use this data as you see fit.
 
-![data](https://raw.githubusercontent.com/boisgera/pioupiou/master/images/xy.svg)
+![data](images/xy.svg)
 
 Getting started
 --------------------------------------------------------------------------------
