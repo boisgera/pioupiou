@@ -14,6 +14,9 @@ theme:
   name: material
   features:
     - navigation.expand
+  icon:
+    logo: material/bird
+  favicon: images/favicon.png
 
 plugins:
   - git-revision-date
