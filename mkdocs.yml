@@ -6,9 +6,9 @@ site_dir: docs
 
 pages:
   - Overview: index.md
-  - Tests: tests.md
   - Examples:
     - Height: height.md
+  - Tests: tests.md
 
 theme:
   name: material
