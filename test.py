@@ -11,7 +11,7 @@ import strictyaml
 
 # Test Files
 # ------------------------------------------------------------------------------
-mkdocs_content = strictyaml.load(open("mkdocs.yml").read())["pages"].data
+mkdocs_content = strictyaml.load(open("mkdocs.yml").read())["nav"].data
 mkdocs_files = []
 for value in [list(item.values())[0] for item in mkdocs_content]:
     if isinstance(value, str): # page
