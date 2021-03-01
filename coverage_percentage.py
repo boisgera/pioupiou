@@ -2,5 +2,5 @@
 import sys
 output = sys.stdin.read()
 for line in output.splitlines():
-    if line.startswith("pioupiou/__init__.py"):
+    if line.startswith("Total"):
         print(line[-4:].strip())
