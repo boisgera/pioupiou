@@ -49,4 +49,5 @@ height = Height(omega) # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
 df = pd.DataFrame({"Height [cm]": height})
 sns.displot(df, x="Height [cm]", stat="density", kde=True, aspect=16/9)
 plt.title("Height Distribution in France")
+plt.gcf().subplots_adjust(top=0.95)
 plt.savefig("height.svg")
