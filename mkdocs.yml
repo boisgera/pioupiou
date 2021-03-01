@@ -12,6 +12,8 @@ pages:
 
 theme:
   name: material
+  features:
+    - navigation.expand
 
 plugins:
   - git-revision-date
