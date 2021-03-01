@@ -30,7 +30,7 @@ Proportion of females:
     >>> Is_female = pp.Bernoulli(proportion_female)
     >>> Sex_symbol = sex_symbol(Is_female)
 
-Distribution of heights, conditionned by the sex:
+Distribution of heights, conditioned by the sex:
 
     >>> mu_female = 161.7
     >>> sigma_female = (175.0 - 149.0) / (2 * 1.96)
