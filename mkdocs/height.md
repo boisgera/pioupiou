@@ -3,13 +3,14 @@ Height ♀ / ♂
 
 ![Height](images/height.svg)
 
-Implementation
---------------------------------------------------------------------------------
 
 Imports:
 
     >>> import numpy as np
     >>> import pioupiou as pp; pp.restart()
+
+Models
+--------------------------------------------------------------------------------
 
 Sex as a symbol (♀ or ♂), for fun !
 
@@ -21,8 +22,6 @@ Sex as a symbol (♀ or ♂), for fun !
     ...     else:
     ...         return "♂"
  
-### Models
-
 Proportion of females in the population:
 
     >>> proportion_female = 0.516
@@ -43,7 +42,8 @@ Combined height:
     >>> Is_male = pp.logical_not(Is_female)
     >>> Height = Is_female * Height_female + Is_male * Height_male
 
-### Simulation
+Simulation
+--------------------------------------------------------------------------------
 
 Sexes:
 
