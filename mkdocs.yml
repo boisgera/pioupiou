@@ -4,7 +4,7 @@ docs_dir: mkdocs
 
 site_dir: docs
 
-pages:
+nav:
   - Overview: index.md
   - Examples:
     - Height: height.md
