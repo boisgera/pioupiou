@@ -11,8 +11,14 @@ import strictyaml
 
 # Test Files
 # ------------------------------------------------------------------------------
-mkdocs_pages = strictyaml.load(open("mkdocs.yml").read())["pages"].data
-mkdocs_files = ["mkdocs/" + list(item.values())[0] for item in mkdocs_pages]
+mkdocs_content = strictyaml.load(open("mkdocs.yml").read())["pages"].data
+mkdocs_files = []
+for value in [list(item.values())[0] for item in mkdocs_content]:
+    if isinstance(value, str): # page
+        mkdocs_files.append(value)
+    else: # section
+        mkdocs_files.extend([list(item.values())[0] for item in value])
+mkdocs_files = ["mkdocs/" + file for file in mkdocs_files]
 extra_testfiles = []
 test_files = mkdocs_files + extra_testfiles
 
