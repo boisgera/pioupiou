@@ -22,15 +22,14 @@ Bivariate Gaussian
 Models
 --------------------------------------------------------------------------------
 
-    >>> mu = [0.0, 0.0]
-    >>> Sigma = [[1.0, 0.75], [0.75, 1.0]]
-    >>> N1, N2 = Normal2(mu[0], mu[1], Sigma[0][0], Sigma[0][1], Sigma[1][1])
+    >>> mu, Sigma = [0.0, 0.0], [[1.0, 0.75], [0.75, 1.0]]
+    >>> X, Y = Normal2(mu[0], mu[1], Sigma[0][0], Sigma[0][1], Sigma[1][1])
 
 Simulation
 --------------------------------------------------------------------------------
 
     >>> omega = pp.Omega(1000)
-    >>> x, y = N1(omega), N2(omega)
+    >>> x, y = X(omega), Y(omega)
     >>> x # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE 
     array([ 3.50349227e-01, -6.13458179e-01, -1.73949889e+00, ...])
     >>> y # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE 
