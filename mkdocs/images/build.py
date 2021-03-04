@@ -96,7 +96,7 @@ mu, phi, sigma = -1.02, 0.95, 0.25
 H, Y = np.zeros(n, dtype=object), np.zeros(n, dtype=object)
 for t in ts:
     if t == 0:
-        H[t] = pp.Normal(0, sigma / np.sqrt(1 - phi*phi))
+        H[t] = pp.Normal(mu, sigma / np.sqrt(1 - phi*phi))
     else:
         H[t] = mu + phi * (H[t-1] - mu) + pp.Normal(0, sigma)
     Y[t] = pp.Normal(0, pp.exp(0.5 * H[t]))
@@ -124,7 +124,7 @@ sns.lineplot(
     #estimator=None, lw=1,
 )
 
-plt.gcf().gca().axis([0, 100, -0.1, 0.1])
+#plt.gcf().gca().axis([0, 100, -0.1, 0.1])
 plt.title("Evolution of the Asset Price")
 plt.gcf().subplots_adjust(left=0.20, top=0.90)
 plt.savefig("volatility.svg")

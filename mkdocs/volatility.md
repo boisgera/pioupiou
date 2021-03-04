@@ -20,7 +20,7 @@ The evolution of the asset price \(Y_t\) at time \(t\) is given by
 where initially
 
 \[
-    H_0 \sim \mathcal{N}\left(0, \frac{\sigma}{\sqrt{1 - \phi^2}}\right)
+    H_0 \sim \mathcal{N}\left(\mu, \frac{\sigma}{\sqrt{1 - \phi^2}}\right)
 \]
 
 and then
@@ -30,15 +30,13 @@ and then
 \]
 
 
-
-
     >>> mu, phi, sigma = -1.02, 0.95, 0.25
     >>> n = 100
     >>> ts = np.arange(n)
     >>> H, Y = np.zeros(n, dtype=object), np.zeros(n, dtype=object)
     >>> for t in ts:
     ...     if t == 0:
-    ...         H[t] = pp.Normal(0, sigma / np.sqrt(1 - phi*phi))
+    ...         H[t] = pp.Normal(mu, sigma / np.sqrt(1 - phi*phi))
     ...     else:
     ...         H[t] = mu + phi * (H[t-1] - mu) + pp.Normal(0, sigma)
     ...     Y[t] = pp.Normal(0, pp.exp(0.5 * H[t]))
