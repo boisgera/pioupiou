@@ -11,11 +11,30 @@ Imports:
 Model
 --------------------------------------------------------------------------------
 
-    >>> import sys; sys.setrecursionlimit(10000)
+The evolution of the asset price \(Y_t\) at time \(t\) is given by
 
+\[
+    Y_t \sim \mathcal{N}(0, \exp(H_t/2))
+\]
+
+where initially
+
+\[
+    H_0 \sim \mathcal{N}\left(0, \frac{\sigma}{\sqrt{1 - \phi^2}}\right)
+\]
+
+and then
+
+\[
+    H_t = \mu  + \phi(H_{t-1}- \mu) + \Delta_t \; \mbox{ with } \; \Delta_t \sim \mathcal{N}(0,\sigma^2).
+\]
+
+
+
+
+    >>> mu, phi, sigma = -1.02, 0.95, 0.25
     >>> n = 100
     >>> ts = np.arange(n)
-    >>> mu, phi, sigma = -1.02, 0.95, 0.25
     >>> H, Y = np.zeros(n, dtype=object), np.zeros(n, dtype=object)
     >>> for t in ts:
     ...     if t == 0:
@@ -26,6 +45,12 @@ Model
 
 Simulation
 --------------------------------------------------------------------------------
+
+Given that our model is deeply nested, we need to increase the recursion limit:
+
+    >>> import sys; sys.setrecursionlimit(10000)
+
+Then, as usual:
 
     >>> omega = pp.Omega(100)
     >>> y = np.array([Yt(omega) for Yt in Y])
