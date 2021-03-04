@@ -8,6 +8,7 @@ nav:
   - Overview: index.md
   - Examples:
     - Height: height.md
+    - Gaussians: gaussians.md
   - Tests: tests.md
 
 theme:
