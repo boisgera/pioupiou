@@ -79,6 +79,54 @@ g = sns.jointplot(x="x", y="y", data=data,
 #g.plot_joint(sns.kdeplot)
 
 plt.savefig("gaussians.svg")
+plt.clf()
 
+# ------------------------------------------------------------------------------
+
+
+import numpy as np
+import pioupiou as pp; pp.restart()
+
+
+import sys; sys.setrecursionlimit(10000)
+
+n = 100
+ts = np.arange(n)
+mu, phi, sigma = -1.02, 0.95, 0.25
+H, Y = np.zeros(n, dtype=object), np.zeros(n, dtype=object)
+for t in ts:
+    if t == 0:
+        H[t] = pp.Normal(0, sigma / np.sqrt(1 - phi*phi))
+    else:
+        H[t] = mu + phi * (H[t-1] - mu) + pp.Normal(0, sigma)
+    Y[t] = pp.Normal(0, pp.exp(0.5 * H[t]))
+
+omega = pp.Omega(1000)
+y = np.array([Yt(omega) for Yt in Y])
+
+data = {"trajectory": [], "Time": [], "Price": [], "type": []}
+for t in np.arange(len(y)):
+    for omega in np.arange(np.shape(y)[1]):
+       data["trajectory"].append(omega)
+       data["Time"].append(t)
+       data["Price"].append(y[t, omega])
+       data["type"].append("aggregate")
+
+data = pd.DataFrame.from_dict(data)
+print(data)
+
+sns.lineplot(
+    data=data,
+    x="Time", y="Price", 
+    markers=True, dashes=False,
+    style="type", hue="type",
+    #units="trajectory", 
+    #estimator=None, lw=1,
+)
+
+plt.gcf().gca().axis([0, 100, -0.1, 0.1])
+plt.title("Evolution of the Asset Price")
+plt.gcf().subplots_adjust(left=0.20, top=0.90)
+plt.savefig("volatility.svg")
 
 

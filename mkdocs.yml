@@ -9,6 +9,7 @@ nav:
   - Examples:
     - Height: height.md
     - Gaussians: gaussians.md
+    - Volatility: volatility.md
   - Tests: tests.md
 
 theme:
