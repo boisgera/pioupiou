@@ -39,4 +39,4 @@ Simulation
 References
 --------------------------------------------------------------------------------
 
-  - [CS 287: Gaussians, in Advanced Robotics by Pieter Abbeel](https://people.eecs.berkeley.edu/~pabbeel/cs287-fa12/slides/Gaussians.pdf)
+  - [Gaussians, in Advanced Robotics (Berkeley CS 287) by Pieter Abbeel](https://people.eecs.berkeley.edu/~pabbeel/cs287-fa12/slides/Gaussians.pdf)
