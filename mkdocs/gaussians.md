@@ -53,7 +53,7 @@ Visualization
 <div class="viz">
 ```python
 data = pd.DataFrame({"x":x, "y": y})
- = sns.jointplot(x="x", y="y", data=data,
+p = sns.jointplot(x="x", y="y", data=data,
                   kind="scatter", alpha=1.0,
                   xlim=(-4.0, 4.0), ylim=(-4.0, 4.0))
 p.fig.suptitle("Correlated Gaussian Variables")
