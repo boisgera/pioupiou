@@ -28,7 +28,10 @@ jobs:
 
       - name: Build the images
         if: matrix.os == 'ubuntu-20.04'
-        run: apt-get install -yq fonts-roboto && cd mkdocs/images && ./build.py
+        run: |
+          sudo apt-get install -yq fonts-roboto 
+          cd mkdocs/images 
+          ./build.py
 
       - name: Create coverage report
         if: matrix.os == 'ubuntu-20.04'
