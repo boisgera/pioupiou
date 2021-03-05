@@ -4,6 +4,7 @@ Pioupiou 🐤
 [![build](https://github.com/boisgera/pioupiou/actions/workflows/build.yml/badge.svg)](https://github.com/boisgera/pioupiou/actions/workflows/build.yml)
 [![coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/boisgera/13615cd4d2f090624f8fa068f29d67f9/raw/test.json)](https://boisgera.github.io/pioupiou/htmlcov)
 [![doc](https://img.shields.io/badge/doc-mkdocs-blue)](https://boisgera.github.io/pioupiou)
+[![MIT License](https://img.shields.io/badge/License-MIT-blue)](LICENSE.txt)
 ![stage](https://img.shields.io/badge/stage-pre--alpha-red) 
 
 Introduction
