@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
-import seaborn as sns ; sns.set_theme(style="whitegrid")
+import seaborn as sns ; sns.set_theme(style="whitegrid", font="Roboto")
+import matplotlib as mpl
+# mpl.rcParams['font.family'] = 'sans-serif'
+# mpl.rcParams['font.sans-serif'] = ['Gentium']
 import matplotlib.pyplot as plt
 import pandas as pd
 import pioupiou as pp

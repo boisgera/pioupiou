@@ -41,7 +41,7 @@ That's about it! Use this data as you see fit. For example:
 <div class="viz">
 ```python
 import pandas as pd
-import seaborn as sns ; sns.set_theme(style="whitegrid")
+import seaborn as sns
 import matplotlib.pyplot as plt
 
 data = pd.DataFrame({"x":x, "y": y})

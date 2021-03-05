@@ -97,7 +97,7 @@ Visualization
 ```python
 import matplotlib.pyplot as plt
 import pandas as pd
-import seaborn as sns ; sns.set_theme(style="whitegrid")
+import seaborn as sns
 
 df = pd.DataFrame({"Height [cm]": height})
 sns.displot(df, x="Height [cm]", stat="density", kde=True, aspect=16/9)
