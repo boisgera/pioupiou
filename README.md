@@ -36,6 +36,10 @@ That's about it! Use this data as you see fit.
 Getting started
 --------------------------------------------------------------------------------
 
-Install the latest version of pioupiou with:
+Install the latest version of pioupiou with
 
     $ pip install --upgrade git+https://github.com/boisgera/pioupiou.git
+
+then have a look at the documentation <https://boisgera.github.io/pioupiou/>.
+
+    
