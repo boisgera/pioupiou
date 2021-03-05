@@ -39,14 +39,14 @@ That's about it! Use this data as you see fit. For example:
 
 <div class="viz">
 ```python
+import pandas as pd
 import seaborn as sns ; sns.set_theme(style="whitegrid")
 import matplotlib.pyplot as plt
-import pandas as pd
 
 data = pd.DataFrame({"x":x, "y": y})
 sns.jointplot(x="x", y="y", data=data,
               kind="reg", truncate=False,
-              xlim=(0.0, 1.0), ylim=(0.5, 2.0))
+              xlim=(0.0, 1.0), ylim=(0.75, 1.75))
 plt.savefig("xy.svg")
 ```
 </div>
