@@ -53,10 +53,13 @@ Visualization
 <div class="viz">
 ```python
 data = pd.DataFrame({"x":x, "y": y})
-g = sns.jointplot(x="x", y="y", data=data,
+ = sns.jointplot(x="x", y="y", data=data,
                   kind="scatter", alpha=1.0,
                   xlim=(-4.0, 4.0), ylim=(-4.0, 4.0))
-plt.title("Correlated Gaussian Variables")
+p.fig.suptitle("Correlated Gaussian Variables")
+p.ax_joint.collections[0].set_alpha(0)
+p.fig.tight_layout()
+p.fig.subplots_adjust(top=0.95)
 plt.savefig("gaussians.svg")
 ```
 </div>
