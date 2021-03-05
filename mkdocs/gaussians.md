@@ -56,9 +56,9 @@ data = pd.DataFrame({"x":x, "y": y})
 p = sns.jointplot(x="x", y="y", data=data,
                   kind="scatter", alpha=1.0,
                   xlim=(-4.0, 4.0), ylim=(-4.0, 4.0))
-p.fig.suptitle("Correlated Gaussian Variables")
+p.fig.suptitle("Correlated Gaussian Variables", fontsize="medium")
 p.ax_joint.collections[0].set_alpha(0)
-p.fig.tight_layout()
+#p.fig.tight_layout()
 p.fig.subplots_adjust(top=0.95)
 plt.savefig("gaussians.svg")
 ```
