@@ -18,13 +18,13 @@ Model
 The evolution of the asset price \(Y_t\) at time \(t\) is given by
 
 \[
-    Y_t \sim \mathcal{N}(0, \exp(H_t/2))
+    Y_t \sim \mathcal{N}(0, (\exp(H_t/2))^2)
 \]
 
 where initially
 
 \[
-    H_0 \sim \mathcal{N}\left(\mu, \frac{\sigma}{\sqrt{1 - \phi^2}}\right)
+    H_0 \sim \mathcal{N}\left(\mu, \left(\frac{\sigma}{\sqrt{1 - \phi^2}}\right)^2\right)
 \]
 
 and then
