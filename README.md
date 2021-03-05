@@ -40,6 +40,6 @@ Install the latest version of pioupiou with
 
     $ pip install --upgrade git+https://github.com/boisgera/pioupiou.git
 
-then have a look at the documentation <https://boisgera.github.io/pioupiou/>.
+then have a look at the documentation : <https://boisgera.github.io/pioupiou/>.
 
     
