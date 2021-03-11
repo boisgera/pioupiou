@@ -73,7 +73,7 @@ for filename in test_files:
                     lines[i] = ">>> " + line
             lines[i] = 4 * " " + lines[i]
 
-    open(filename, "w").write("\n".join(lines))
+    open(filename, "w", encoding="utf-8").write("\n".join(lines))
 
 
 # Run the Tests
