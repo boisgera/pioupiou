@@ -30,7 +30,7 @@ jobs:
         if: matrix.os == 'ubuntu-20.04'
         run: |
           sudo apt-get install -yq fonts-roboto
-          python -c 'import sys ; from matplotlib import font_manager ; r = font_manager.findfont("Roboto") ; print("font:", r); sys.exit("Roboto" in r)' 
+          python -c 'import sys ; from matplotlib import font_manager ; font_manager._rebuild(); r = font_manager.findfont("Roboto") ; print("font:", r); sys.exit("Roboto" in r)' 
 
       - name: Build the Images
         if: matrix.os == 'ubuntu-20.04'
