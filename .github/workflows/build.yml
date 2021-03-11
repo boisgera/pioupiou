@@ -26,7 +26,13 @@ jobs:
       - name: Test pioupiou
         run: python test.py
 
-      - name: Build the images
+      - name: Install Roboto Font
+        if: matrix.os == 'ubuntu-20.04'
+        run: |
+          sudo apt-get install -yq fonts-roboto
+          python -c 'import sys ; from matplotlib import font_manager ; r = font_manager.findfont("Roboto) ; sys.exit("Roboto" in r)' 
+
+      - name: Build the Images
         if: matrix.os == 'ubuntu-20.04'
         run: |
           sudo apt-get install -yq fonts-roboto
