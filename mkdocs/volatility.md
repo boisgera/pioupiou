@@ -81,6 +81,10 @@ Visualization
 --------------------------------------------------------------------------------
 
 ```python
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+
 data = {"trajectory": [], "Time": [], "Price": [], "type": []}
 for t in np.arange(len(y)):
     for omega in np.arange(np.shape(y)[1]):
@@ -90,14 +94,10 @@ for t in np.arange(len(y)):
        data["type"].append("aggregate")
 data = pd.DataFrame.from_dict(data)
 
-sns.lineplot(
-    data=data,
-    x="Time", y="Price", 
+_ = sns.lineplot(
+    data=data, x="Time", y="Price", 
     markers=True, dashes=False,
-    style="type", hue="type",
-    #units="trajectory", 
-    #estimator=None, lw=1,
-)
+    style="type", hue="type")
 
 _ = plt.title("Evolution of the Asset Price")
 plt.gcf().subplots_adjust(left=0.20, top=0.90)
