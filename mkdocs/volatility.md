@@ -80,7 +80,7 @@ array([[-0.03467247, -0.34340423,  0.25390125, ...,  0.96859772,
 Visualization
 --------------------------------------------------------------------------------
 
-``` python
+```python
 data = {"trajectory": [], "Time": [], "Price": [], "type": []}
 for t in np.arange(len(y)):
     for omega in np.arange(np.shape(y)[1]):
