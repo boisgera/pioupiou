@@ -46,7 +46,6 @@ array([-1.20958718e+00,  1.65204470e-01, -1.31085277e+00, ...])
 Visualization
 --------------------------------------------------------------------------------
 
-<div class="viz">
 ```python
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -60,9 +59,6 @@ _ = p.fig.suptitle("Correlated Gaussian Variables", fontsize="medium")
 p.fig.tight_layout()
 plt.savefig("gaussians.svg")
 ```
-</div>
-
-
 
 References
 --------------------------------------------------------------------------------

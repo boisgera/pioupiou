@@ -38,7 +38,6 @@ array([1.09588258, 1.22942954, 1.01954509, 0.99213115, ..., 1.14366864])
 
 That's about it! Use this data as you see fit. For example:
 
-<div class="viz">
 ```python
 import pandas as pd
 import seaborn as sns
@@ -49,7 +48,6 @@ _ = sns.jointplot(x="x", y="y", data=data,
               kind="reg", xlim=(0.0, 1.0), ylim=(0.75, 1.75))
 plt.savefig("xy.svg")
 ```
-</div>
 
 ![data](https://boisgera.github.io/pioupiou/images/xy.svg)
 

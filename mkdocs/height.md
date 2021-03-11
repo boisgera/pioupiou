@@ -83,7 +83,6 @@ array([188.17949253, 167.97025732, 161.63754187, 160.62997627, ...])
 Visualization
 --------------------------------------------------------------------------------
 
-<div class="viz">
 ```python
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -95,7 +94,6 @@ _ = plt.title("Height Distribution in France")
 plt.gcf().subplots_adjust(top=0.95)
 plt.savefig("height.svg")
 ```
-</div>
 
 References
 --------------------------------------------------------------------------------

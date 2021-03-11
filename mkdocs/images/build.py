@@ -43,19 +43,6 @@ def fetch_code(src):
             code += line[4:] + "\n"
     return code
 
-def fetch_viz_code(src):
-    code = ""    
-    add = False
-    for line in src.splitlines():
-        #line = line.strip()
-        if add and not line.strip().startswith("```") and not line.strip().startswith("</div>"):
-            code += line + "\n"
-        if line == '<div class="viz">':
-            add = True
-        if line == '</div>':
-            add = False
-    return code
-        
 # ------------------------------------------------------------------------------
 
 src = open("../index.md").read()

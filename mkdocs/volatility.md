@@ -80,7 +80,6 @@ array([[-0.03467247, -0.34340423,  0.25390125, ...,  0.96859772,
 Visualization
 --------------------------------------------------------------------------------
 
-<div class="viz">
 ``` python
 data = {"trajectory": [], "Time": [], "Price": [], "type": []}
 for t in np.arange(len(y)):
@@ -104,7 +103,6 @@ _ = plt.title("Evolution of the Asset Price")
 plt.gcf().subplots_adjust(left=0.20, top=0.90)
 plt.savefig("volatility.svg")
 ```
-</div>
 
 
 
