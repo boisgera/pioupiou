@@ -54,7 +54,7 @@ os.chdir(tmp_dir)
 #   - add prompts when it's necessary. 
 for filename in test_files:
     with open(filename) as file:
-        src = file.read()
+        src = file.read(encoding="utf-8")
     lines = src.splitlines()
     code, prompt = False, False
     for i, line in enumerate(lines):
