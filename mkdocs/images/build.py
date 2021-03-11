@@ -33,7 +33,7 @@ def fetch_code(src):
                 else:
                     lines[i] = ">>> " + line
             lines[i] = 4 * " " + lines[i]
-    src = "\n".join(src)
+    src = "\n".join(lines)
 
     code = ""
     fences = False
