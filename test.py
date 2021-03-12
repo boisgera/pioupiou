@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 # Python Standard Library
+import codeop
 import doctest
 import os
 import platform
@@ -46,34 +47,119 @@ for filename in test_files:
 # see <https://github.com/boisgera/pioupiou/issues/8>), then remove the fences
 # and indent the code lines.
 
-cwd = os.getcwd()
-os.chdir(tmp_dir)
+# BUG: the following code will stop after the main branch of a if clause,
+#      even if there is an else clause: cc("if True:\n    a=1") WILL return
+#      a code block (while the Python interpreter is cautious and needs an
+#      extra newline, just to be sure that your statement is over).
+#      Have a look at how the interpreter of the `code` module behaves.
+if False:
+    def promptize(src):
+        "Add >>> or ... prompts to Python code"
+        cc = lambda src_: codeop.compile_command(src_, symbol="exec")
+        lines = src.splitlines()
+        output = []
+        chunk = []
+        for line in lines:
+            if chunk == []: # new start
+                output.append(">>> " + line)
+            else:
+                output.append("... " + line)
+            chunk.append(line)
+            try:
+                code = cc("\n".join(chunk))
+                if code is not None: # full statement
+                    chunk = [] # start over
+            except:
+                #print("\n".join(chunk))
+                raise
+        assert len(lines) == len(output)
+
+        #print("\n".join(output))
+        return "\n".join(output)
+
+    def tweak(src):
+        # Find code blocks with python fences, 
+        # add prompts when necessary, 
+        # then transform them into indented code blocks.
+        lines = src.splitlines()
+        chunks = {}
+        start, end, code = None, None, []
+        for i, line in enumerate(lines):
+            if line.startswith("```python"):
+                start = i
+                code.append("")
+            elif line.startswith("```"):
+                end = i+1
+                code.append("")
+                #print(end - start, len(code), "\n", code)
+                assert end - start == len(code)
+                chunks[(start, end)] = code
+                code = []
+            elif code != []:
+                code.append(line)
+    
+        # print("chunks:")
+        # for chunk in chunks.values():
+        #     print(5*"-")
+        #     print("\n".join(chunk))
+
+        for loc, code in chunks.items():
+            chunk = "\n".join(code[1:-1]) # dont promptize initial and final newline
+            if not chunk.strip().startswith(">>> "): # prompts are missing
+                print("\nchunk:", chunk)
+                code[1:-1] = promptize(chunk).splitlines()
+            code = [4*" " + line for line in code]
+            chunks[loc] = code
+
+        for (i, j), code in chunks.items():
+            lines[i:j] = code
+        new_src = "\n".join(lines)
+        return new_src
+
+    cwd = os.getcwd()
+    os.chdir(tmp_dir)
+
+    #print(test_files)
+
+    for filename in test_files:
+        with open(filename, encoding="utf-8") as file:
+            src = file.read()
+        src = tweak(src)
+        print(40*"-")
+        print(">", filename)
+        print(src)
+        print(40*"-")
+        with open(filename, "w", encoding="utf-8") as file:
+            file.write(src)
 
 # Tweaks:
 #   - replace the python fences with indented blocks,
 #   - add prompts when it's necessary. 
-for filename in test_files:
-    with open(filename, encoding="utf-8") as file:
-        src = file.read()
-    lines = src.splitlines()
-    code, prompt = False, False
-    for i, line in enumerate(lines):
-        if line.startswith("```python"):
-            code = True
-            prompt = lines[i+1].startswith(">>> ")
-            lines[i] = ""
-        elif line.startswith("```"):
-            code = False
-            lines[i] = ""
-        elif code == True:
-            if not prompt: 
-                if line.startswith(" "): # heuristic for line continuation
-                    lines[i] = "... " + line
-                else:
-                    lines[i] = ">>> " + line
-            lines[i] = 4 * " " + lines[i]
+if True:
+    cwd = os.getcwd()
+    os.chdir(tmp_dir)
+    for filename in test_files:
+        with open(filename, encoding="utf-8") as file:
+            src = file.read()
+        lines = src.splitlines()
+        code, prompt = False, False
+        for i, line in enumerate(lines):
+            if line.startswith("```python"):
+                code = True
+                prompt = lines[i+1].startswith(">>> ")
+                lines[i] = ""
+            elif line.startswith("```"):
+                code = False
+                lines[i] = ""
+            elif code == True:
+                if not prompt: 
+                    if line.startswith(" "): # heuristic for line continuation
+                        lines[i] = "... " + line
+                    else:
+                        lines[i] = ">>> " + line
+                lines[i] = 4 * " " + lines[i]
 
-    open(filename, "w", encoding="utf-8").write("\n".join(lines))
+        open(filename, "w", encoding="utf-8").write("\n".join(lines))
 
 
 # Run the Tests
