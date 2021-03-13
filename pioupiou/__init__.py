@@ -118,6 +118,9 @@ class RandomVariable(abc.ABC):
     def __rfloordiv__(self, other):
         return function(operator.floordiv)(other, self)
 
+    def __pow__(self, other):
+        return function(operator.pow)(self, other)
+
     # TODO: divmod, pow, lshift, rshift, and, xor, or
 
     def __lt__(self, other):
@@ -231,15 +234,15 @@ class Bernoulli(RandomVariable):
 
 
 class Normal(RandomVariable):
-    def __init__(self, mu=0.0, sigma=1.0):
+    def __init__(self, mu=0.0, sigma2=1.0):
         self.U = Uniform()
         self.mu = randomize(mu)
-        self.sigma = randomize(sigma)
+        self.sigma2 = randomize(sigma2)
 
     def __call__(self, omega):
         u = self.U(omega)
         mu = self.mu(omega)
-        sigma = self.sigma(omega)
+        sigma = np.sqrt(self.sigma2(omega))
         return ss.erfinv(2 * u - 1) * np.sqrt(2) * sigma + mu
 
 

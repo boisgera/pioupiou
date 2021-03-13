@@ -79,7 +79,7 @@ to get an `omega`
     0.8743604377283316
 
     >>> restore()
-    >>> N = Normal(1.5, 2.7)
+    >>> N = Normal(1.5, (2.7)**2)
     >>> ns = N(Omega(10000))
     >>> print("mean:", np.mean(ns))  
     mean: 1.4950310577047152
@@ -114,7 +114,7 @@ to get an `omega`
     >>> restore()
     >>> print(exp(1.0))
     2.718281828459045
-    >>> N1 = Normal(1.0, 0.001)
+    >>> N1 = Normal(1.0, (0.001)**2)
     >>> X = exp(N1)
     >>> omega = Omega(10)
     >>> X(omega)
@@ -122,8 +122,8 @@ to get an `omega`
            2.72197555, 2.71901739, 2.719944  , 2.71857969, 2.72240226])
 
     >>> restore()
-    >>> N1 = Normal(1.0, 0.01)
-    >>> N2 = Normal(2.0, 0.02)
+    >>> N1 = Normal(1.0, (0.01)**2)
+    >>> N2 = Normal(2.0, (0.02)**2)
     >>> X = N1 + N2
     >>> omega = Omega(10)
     >>> X(omega)
@@ -310,13 +310,13 @@ Distributions
     0.3503492272565639
 
     >>> pp.restart()
-    >>> N = pp.Normal(0.0, 1.0)
+    >>> N = pp.Normal(0.0, (1.0)**2)
     >>> omega = pp.Omega()
     >>> N(omega)
     0.3503492272565639
 
     >>> pp.restart()
-    >>> N = pp.Normal(1.0, 0.1)
+    >>> N = pp.Normal(1.0, (0.1)**2)
     >>> omega = Omega(1000)
     >>> n = N(omega)
     >>> n # doctest: +ELLIPSIS

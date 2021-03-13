@@ -16,10 +16,9 @@ Bivariate Gaussian
 
     >>> def Normal2(mu1, mu2, Sigma11, Sigma12, Sigma22):
     ...     Sigma21 = Sigma12
-    ...     N1 = pp.Normal(mu=mu1, sigma=pp.sqrt(Sigma11))
+    ...     N1 = pp.Normal(mu1, Sigma11)
     ...     mu = mu2 + Sigma21 / Sigma11 * (N1 - mu1)
-    ...     sigma = pp.sqrt(Sigma22 - Sigma21 / Sigma22 * Sigma12)
-    ...     N2 = pp.Normal(mu, sigma)
+    ...     N2 = pp.Normal(mu, Sigma22 - Sigma21 / Sigma22 * Sigma12)
     ...     return N1, N2
 
 

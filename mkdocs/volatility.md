@@ -39,10 +39,10 @@ and then
     >>> H, Y = np.zeros(n, dtype=object), np.zeros(n, dtype=object)
     >>> for t in ts:
     ...     if t == 0:
-    ...         H[t] = pp.Normal(mu, sigma / np.sqrt(1 - phi*phi))
+    ...         H[t] = pp.Normal(mu, sigma**2 / (1 - phi*phi))
     ...     else:
-    ...         H[t] = mu + phi * (H[t-1] - mu) + pp.Normal(0, sigma)
-    ...     Y[t] = pp.Normal(0, pp.exp(0.5 * H[t]))
+    ...         H[t] = mu + phi * (H[t-1] - mu) + pp.Normal(0, sigma**2)
+    ...     Y[t] = pp.Normal(0, pp.exp(0.5 * H[t])**2)
     >>> 
 
 

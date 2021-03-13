@@ -18,7 +18,7 @@ Use it to define probabilistic models :
     >>> import pioupiou as pp
     >>> a, b = 0.5, 1.0
     >>> X = pp.Uniform(0.0, 1.0)
-    >>> E = pp.Normal(0.0, 0.1)
+    >>> E = pp.Normal(0.0, 0.01)
     >>> Y = a * X + b + E
 
 

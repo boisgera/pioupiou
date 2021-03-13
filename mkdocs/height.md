@@ -39,10 +39,10 @@ Distribution of heights (sex-dependent):
 
     >>> mu_female = 161.7
     >>> sigma_female = (175.0 - 149.0) / (2 * 1.96)
-    >>> Height_female = pp.Normal(mu_female, sigma_female)
+    >>> Height_female = pp.Normal(mu_female, sigma_female**2)
     >>> mu_male = 174.4
     >>> sigma_male = (189.0 - 162.0) / (2 * 1.96)
-    >>> Height_male = pp.Normal(mu_male, sigma_male)
+    >>> Height_male = pp.Normal(mu_male, sigma_male**2)
 
 
 Combined height:
