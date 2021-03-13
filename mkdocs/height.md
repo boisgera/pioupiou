@@ -18,14 +18,13 @@ Models
 
 Sex as a symbol (♀ or ♂), for fun !
 
-
-    >>> def sex_symbol(is_female):
+    >>> @pp.randomize
+    ... @np.vectorize
+    ... def sex_symbol(is_female):
     ...     if is_female:
     ...         return "♀"
     ...     else:
     ...         return "♂"
-    >>> sex_symbol = pp.randomize(np.vectorize(sex_symbol))
-
 
 Proportion of females in the population:
 
