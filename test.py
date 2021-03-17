@@ -62,7 +62,7 @@ def promptize(src):
             code = cc("\n".join(chunk))
             if code is not None:  # full statement
                 chunk = []  # start over
-        except:
+        except: # pragma: no cover
             raise
     assert len(lines) == len(output)
     return "\n".join(output)
