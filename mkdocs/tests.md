@@ -46,7 +46,7 @@ to get an `omega`
 
 --------------------------------------------------------------------------------
 
-    >>> restore()
+    >>> restart()
     >>> U1 = Uniform(0.0, 1.0)
     >>> omega = Omega(10)
     >>> for u1 in U1(omega):
@@ -62,7 +62,7 @@ to get an `omega`
     0.5436249914654229
     0.9350724237877682
 
-    >>> restore()
+    >>> restart()
     >>> U2 = Uniform(0.0, U1)
     >>> omega = Omega(10)
     >>> for u2 in U2(omega):
@@ -78,7 +78,7 @@ to get an `omega`
     0.2955281313457811
     0.8743604377283316
 
-    >>> restore()
+    >>> restart()
     >>> N = Normal(1.5, (2.7)**2)
     >>> ns = N(Omega(10000))
     >>> print("mean:", np.mean(ns))  
@@ -86,12 +86,12 @@ to get an `omega`
     >>> print("std dev:", np.std(ns))
     std dev: 2.705182786283677
 
-    >>> restore()
+    >>> restart()
     >>> X, Y, Z = Uniform(), Uniform(1.0, 2.0), Normal()
     >>> print("dimension of the universe:", Omega.n)
     dimension of the universe: 3
 
-    >>> restore()
+    >>> restart()
     >>> U1 = Uniform()
     >>> U2 = Uniform(1.0, 2.0)
     >>> @function
@@ -111,7 +111,7 @@ to get an `omega`
     >>> Z(omega)
     array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0.])
 
-    >>> restore()
+    >>> restart()
     >>> print(exp(1.0))
     2.718281828459045
     >>> N1 = Normal(1.0, (0.001)**2)
@@ -121,7 +121,7 @@ to get an `omega`
     array([2.71923434, 2.71661479, 2.71355749, 2.71249422, 2.72070221,
            2.72197555, 2.71901739, 2.719944  , 2.71857969, 2.72240226])
 
-    >>> restore()
+    >>> restart()
     >>> N1 = Normal(1.0, (0.01)**2)
     >>> N2 = Normal(2.0, (0.02)**2)
     >>> X = N1 + N2
@@ -130,7 +130,7 @@ to get an `omega`
     array([3.02149701, 2.93831437, 3.00397961, 2.94207534, 3.02113554,
            2.99493823, 3.02459988, 3.00819522, 2.99059112, 3.01124626])
 
-    >>> restore()
+    >>> restart()
     >>> U1 = Uniform()
     >>> X = U1 + 1.0
     >>> Y = 1.0 + U1
@@ -159,7 +159,7 @@ to get an `omega`
     TypeError: ...
     >>> V = pp.bool(U)
 
-    >>> restore()
+    >>> restart()
     >>> U1 = Uniform()
     >>> B = (U1 >= 1/3)
     >>> omega = Omega(10)
@@ -240,20 +240,7 @@ Operators
     >>> (5.0 // Constant(2.0))(omega)
     2.0
 
-Universe reboot & restore
---------------------------------------------------------------------------------
 
-    >>> import pioupiou as pp; pp.restart()
-    >>> U = pp.Uniform()
-    >>> omega = pp.Omega()
-    >>> x1 = U(omega)
-    >>> state = pp.save()
-    >>> omega = pp.Omega()
-    >>> x2 = U(omega)
-    >>> pp.restart(state)
-    >>> x3 = U(omega)
-    >>> x2 == x3
-    True
     
 Distributions
 --------------------------------------------------------------------------------

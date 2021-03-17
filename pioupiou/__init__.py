@@ -7,7 +7,8 @@ import operator
 # Third-Party Libraries
 import numpy as np
 import numpy.random as npr
-import scipy.special as ss
+import scipy.special
+import scipy.stats
 import wrapt
 
 # We need to support : random init, custom seed it, continuation (save/restore)
@@ -243,7 +244,7 @@ class Normal(RandomVariable):
         u = self.U(omega)
         mu = self.mu(omega)
         sigma = np.sqrt(self.sigma2(omega))
-        return ss.erfinv(2 * u - 1) * np.sqrt(2) * sigma + mu
+        return scipy.special.erfinv(2 * u - 1) * np.sqrt(2) * sigma + mu
 
 
 class Exponential(RandomVariable):
@@ -255,7 +256,6 @@ class Exponential(RandomVariable):
         u = self.U(omega)
         lambda_ = self.lambda_(omega)
         return -np.log(1 - u) / lambda_
-
 
 class Cauchy(RandomVariable):
     def __init__(self, x0=0.0, gamma=1.0):
@@ -269,6 +269,20 @@ class Cauchy(RandomVariable):
         gamma = self.gamma(omega)
         return x0 + gamma * np.tan(np.pi * (u - 0.5))
 
+# Nota: The scheme used here is applicable to all scipy.stats distribution ;
+#       we don't use it when we can since it's bound to be quite slow ...
+class t(RandomVariable):
+    def __init__(self, nu):
+        self.U = Uniform()
+        self.nu = randomize(nu)
+        # ppf = quantile function, see scipy.stats rv_continuous API
+        self.q = np.vectorize(lambda nu, u: scipy.stats.t(nu).ppf(u))
+
+
+    def __call__(self, omega=None):
+        u = self.U(omega)
+        nu = self.nu(omega)
+        return self.q(nu, u)
 
 # ------------------------------------------------------------------------------
 for name in dir(np):
