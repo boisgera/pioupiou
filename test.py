@@ -114,9 +114,10 @@ for filename in test_files:
 # Run the Tests
 # ------------------------------------------------------------------------------
 verbose = "-v" in sys.argv or "--verbose" in sys.argv
-build = "-b" in sys.argv or "--build" in sys.argv
+build = "-b" in sys.argv or "--build" in sys.argv # build documentation images
 
-if build: # setup and teardown the src code (theming & figure cleanup)
+# Setup and teardown the src code (theming & figure cleanup)
+if build: # pragma: no cover
     for filename in test_files:
         with open(filename, encoding="utf-8") as file:
             src = file.read()
@@ -139,7 +140,8 @@ for filename in test_files:
     fails += _fails
     tests += _tests
 
-if build: # copy the generated images to the images folder
+# Copy the generated images to the images folder
+if build: # pragma: no cover
     for image in glob.glob("*svg"):
         shutil.copy(image, cwd + "/mkdocs/images/" + image)
 
