@@ -143,7 +143,9 @@ for filename in test_files:
 # Copy the generated images to the images folder
 if build: # pragma: no cover
     for image in glob.glob("*svg"):
-        shutil.copy(image, cwd + "/mkdocs/images/" + image)
+        dest_fpath = cwd + "/mkdocs/images/" + image
+        os.makedirs(os.path.dirname(dest_fpath), exist_ok=True)
+        shutil.copy(image, dest_fpath)
 
 os.chdir(cwd)
 
