@@ -3,6 +3,7 @@
 # Python Standard Library
 import codeop
 import doctest
+import glob
 import os
 import shutil
 import sys
@@ -41,9 +42,8 @@ for filename in test_files:
 # Tweak the Test Files
 # ------------------------------------------------------------------------------
 # For each file, find the python fences, see if they are in interpreter mode
-# or "code" mode. If they are in code mode, add the prompts (use and heuristic,
-# see <https://github.com/boisgera/pioupiou/issues/8>), then remove the fences
-# and indent the code lines.
+# or "code" mode. If they are in code mode, add the prompts then remove the 
+# fences and indent the code lines.
 def promptize(src):
     "Add >>> or ... prompts to Python code"
     cc = codeop.compile_command  # symbol="single" (the default here)
@@ -114,6 +114,24 @@ for filename in test_files:
 # Run the Tests
 # ------------------------------------------------------------------------------
 verbose = "-v" in sys.argv or "--verbose" in sys.argv
+build = "-b" in sys.argv or "--build" in sys.argv
+
+if build: # copy the generated images to the image folder.
+    for filename in test_files:
+        with open(filename, encoding="utf-8") as file:
+            src = file.read()
+        src = """
+    >>> import seaborn; seaborn.set_theme(style="whitegrid", font="Roboto")
+    >>> import matplotlib.pyplot
+
+""" + src + """
+    >>> matplotlib.pyplot.close('all')
+    
+"""     
+        with open(filename, "w", encoding="utf-8") as file:
+            file.write(src)
+    for image in glob.glob("*svg"):
+        shutil.copy(image, cwd + "/mkdocs/images/" + image)
 
 fails = 0
 tests = 0
@@ -122,6 +140,8 @@ for filename in test_files:
     _fails, _tests = doctest.testfile(filename, **options)
     fails += _fails
     tests += _tests
+
+
 
 os.chdir(cwd)
 
