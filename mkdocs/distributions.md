@@ -47,7 +47,7 @@ respectively.
 
 ```python
 >>> B = pp.Bernoulli(0.0)
->>> omega = pp.Omega(100)
+>>> omega = pp.Omega(10)
 >>> all(B(omega) == False)
 True
 ```
