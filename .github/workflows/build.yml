@@ -33,7 +33,7 @@ jobs:
           fc-cache -f -v
           python -c 'import sys ; from matplotlib import font_manager ; font_manager._rebuild(); print(font_manager.findSystemFonts()); r = font_manager.findfont("Roboto") ; print("font:", r); sys.exit("Roboto" in r)' 
         
-      - name: Build the documentaion images
+      - name: Build the documentation images
         if: matrix.os == 'ubuntu-20.04'
         run: |
           sudo apt-get install -yq fonts-roboto
