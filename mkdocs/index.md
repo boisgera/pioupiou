@@ -46,8 +46,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 data = pd.DataFrame({"x":x, "y": y})
-_ = sns.jointplot(x="x", y="y", data=data,
-        kind="reg", xlim=(0.0, 1.0), ylim=(0.75, 1.75))
+_ = sns.jointplot(x="x", y="y", data=data, kind="reg", xlim=(0.0, 1.0), ylim=(0.75, 1.75))
 plt.savefig("xy.svg")
 ```
 
