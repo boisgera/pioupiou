@@ -63,14 +63,15 @@ With a larger number of independent samples, we can check these probabilities
 in a histogram
 ```python
 pp.restart()
-B0, B1 = pp.Bernoulli(0.0), pp.Bernoulli(0.25)
-B2, B3 = pp.Bernoulli(0.5), pp.Bernoulli()
+specs = ["pp.Bernoulli(0.0)", "pp.Bernoulli(0.25)", 
+         "pp.Bernoulli(0.5)", "pp.Bernoulli()"]
+Bs = [eval(s) for s in specs]
 omega = pp.Omega(100000)
-b0, b1, b2, b3 = B0(omega), B1(omega), B2(omega), B3(omega)
-data = [["Bernoulli(0.0)", v] for v in b0] + \
-       [["Bernoulli(0.25)", v] for v in b1] + \
-       [["Bernoulli(0.5)", v] for v in b2] + \
-       [["Bernoulli()", v] for v in b3]
+bs = [B(omega) for B in Bs]
+data = []
+for spec, b in zip(specs, bs):
+    data.extend([[spec, v] for v in b])
+
 df = pd.DataFrame(data, columns=["Distribution", "Value"])
 ax = sns.histplot(
     data=df,  
