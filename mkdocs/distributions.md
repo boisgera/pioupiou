@@ -99,26 +99,41 @@ with density
 $$
 f(x) = \frac{1}{b-a} \; \mbox{ if } \; a \leq x \leq b, 
 $$
-and $f(x)= 0$ otherwise.
+and $f(x)= 0$ otherwise. The default value of `a` is `0.0` and the default value
+of `b` is 1.0, this `U = pp.Uniform()` is equivalent to `U = pp.Uniform(0,1)`.
 
+For example
 
-    >>> pp.restart()
-    >>> U = pp.Uniform()
-    >>> omega = pp.Omega()
-    >>> U(omega)
-    0.6369616873214543
+```python
+>>> pp.restart()
+>>> U = pp.Uniform()
+>>> omega = pp.Omega()
+>>> U(omega)
+0.6369616873214543
+```
 
-    >>> pp.restart()
-    >>> U = pp.Uniform(0.0, 1.0)
-    >>> omega = pp.Omega()
-    >>> U(omega)
-    0.6369616873214543
+is equivalent to
 
-    >>> U = pp.Uniform(0.9, 1.1)
-    >>> omega = pp.Omega()
-    >>> U(omega)
-    0.908194704787239
+```python
+>>> pp.restart()
+>>> U = pp.Uniform(0.0, 1.0)
+>>> omega = pp.Omega()
+>>> U(omega)
+0.6369616873214543
+```
 
+We are almost sure that values sampled from `U = pp.Uniform(a, b)` are
+between `a` and `b`:
+
+```python
+>>> a, b = -3, 7
+>>> U = pp.Uniform(a, b)
+>>> omega = pp.Omega(1000)
+>>> all(a <= U(omega)) and all(U(omega) <= b)
+True
+```
+
+Let's visualize some examples of the uniform distribution
 ```python
 pp.restart()
 U0 = pp.Uniform(-1.5, -1.0)
