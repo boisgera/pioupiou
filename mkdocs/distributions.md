@@ -2,36 +2,93 @@ Distributions
 ================================================================================
 
 ```python
+import pioupiou as pp
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import pioupiou as pp
 ```
 
 Bernoulli
 --------------------------------------------------------------------------------
 
-    >>> pp.restart()
-    >>> B = pp.Bernoulli()
-    >>> omega = pp.Omega(5)
-    >>> B(omega)
-    array([False,  True,  True,  True, False])
+The snippet `B = pp.Bernoulli(p)` instantiates a random boolean variable $B$ such that
 
-    >>> pp.restart()
-    >>> B = pp.Bernoulli(0.5)
-    >>> omega = pp.Omega(5)
-    >>> B(omega)
-    array([False,  True,  True,  True, False])
+$$
+\begin{array}{lcl}
+\mathbb{P}(B = \mathrm{true}) &=& p \\
+\mathbb{P}(B = \mathrm{false}) &=& 1-p \\
+\end{array}
+$$
 
-    >>> B = pp.Bernoulli(0.0)
-    >>> omega = pp.Omega(5)
-    >>> B(omega)
-    array([False, False, False, False, False])
 
-    >>> B = pp.Bernoulli(1.0)
-    >>> omega = pp.Omega(5)
-    >>> B(omega)
-    array([ True,  True,  True,  True,  True])
+```python
+>>> pp.restart()
+>>> B = pp.Bernoulli(0.5)
+>>> omega = pp.Omega(10)
+>>> b = B(omega)
+>>> b # doctest: +NORMALIZE_WHITESPACE
+array([False,  True,  True,  True, False, False, False, False, False, False])
+```
+
+The parameter `p` is optional; its default value is `0.5`. 
+Thus `B = Bernoulli()` is equivalent to `B = Bernoulli(0.5)`.
+
+```python
+>>> pp.restart()
+>>> B = pp.Bernoulli()
+>>> omega = pp.Omega(10)
+>>> all(b == B(omega))
+True
+```
+
+With `p=0.0` or `p=1.0` you will get almost surely `False` and `True`
+respectively.
+
+```python
+>>> B = pp.Bernoulli(0.0)
+>>> omega = pp.Omega(100)
+>>> all(B(omega) == False)
+True
+```
+
+```python
+>>> B = pp.Bernoulli(1.0)
+>>> omega = pp.Omega(10)
+>>> all(B(omega) == True)
+True
+```
+
+With a larger number of independent samples, we can check these probabilities 
+in a histogram
+```python
+pp.restart()
+B0, B1 = pp.Bernoulli(0.0), pp.Bernoulli(0.25)
+B2, B3 = pp.Bernoulli(0.5), pp.Bernoulli()
+omega = pp.Omega(100000)
+b0, b1, b2, b3 = B0(omega), B1(omega), B2(omega), B3(omega)
+data = [["Bernoulli(0.0)", v] for v in b0] + \
+       [["Bernoulli(0.25)", v] for v in b1] + \
+       [["Bernoulli(0.5)", v] for v in b2] + \
+       [["Bernoulli()", v] for v in b3]
+df = pd.DataFrame(data, columns=["Distribution", "Value"])
+ax = sns.histplot(
+    data=df,  
+    x="Value", 
+    hue="Distribution",
+    stat="probability", 
+    common_norm=False, 
+    multiple="dodge", 
+    discrete=True, 
+    shrink=0.5
+)
+yticks = plt.yticks([0.0, 0.25, 0.5, 0.75, 1.0])
+xticks = plt.xticks([0, 1], ["False", "True"])
+text = plt.title("Bernoulli Distribution")
+plt.savefig("bernoulli.svg")
+```
+
+![](images/bernoulli.svg)
 
 Uniform
 --------------------------------------------------------------------------------
