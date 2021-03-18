@@ -10,6 +10,7 @@ nav:
     - Height: height.md
     - Gaussians: gaussians.md
     - Volatility: volatility.md
+  - Distributions: distributions.md
   - The Universe: universe.md
   - Tests: tests.md
 
