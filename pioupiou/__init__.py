@@ -212,15 +212,15 @@ class Constant(RandomVariable):
 # Distributions
 # ------------------------------------------------------------------------------
 class Uniform(RandomVariable):
-    def __init__(self, low=0.0, high=1.0):
+    def __init__(self, a=0.0, b=1.0):
         self.n = Omega.n
         Omega.n += 1
-        self.low = randomize(low)
-        self.high = randomize(high)
+        self.a = randomize(a)
+        self.b = randomize(b)
 
     def __call__(self, omega):
         u_n = omega[self.n]  # localized abstraction leak HERE.
-        return self.low(omega) * (1 - u_n) + self.high(omega) * u_n
+        return self.a(omega) * (1 - u_n) + self.b(omega) * u_n
 
 
 class Bernoulli(RandomVariable):

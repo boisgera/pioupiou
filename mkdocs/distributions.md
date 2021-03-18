@@ -94,6 +94,14 @@ plt.close()
 Uniform
 --------------------------------------------------------------------------------
 
+When `a < b`, the snippet `U = pp.Uniform(a, b)` creates a random variable $U$ 
+with density
+$$
+f(x) = \frac{1}{b-a} \; \mbox{ if } \; a \leq x \leq b, 
+$$
+and $f(x)= 0$ otherwise.
+
+
     >>> pp.restart()
     >>> U = pp.Uniform()
     >>> omega = pp.Omega()
@@ -113,12 +121,14 @@ Uniform
 
 ```python
 pp.restart()
-U0, U1, U2 = pp.Uniform(-1.5, -1.0), pp.Uniform(0.0, 1.0),  pp.Uniform(2.0, 4.0)
+U0 = pp.Uniform(-1.5, -1.0)
+U1 = pp.Uniform( 0.0,  1.0)
+U2 = pp.Uniform( 2.0,  4.0)
 omega = pp.Omega(100000)
 u0, u1, u2 = U0(omega), U1(omega), U2(omega)
 data = [["pp.Uniform(-1.5, -1.0)", v] for v in u0] + \
-       [["pp.Uniform(0.0, 1.0)", v] for v in u1] + \
-       [["pp.Uniform(2.0, 4.0)", v] for v in u2]
+       [["pp.Uniform( 0.0,  1.0)", v] for v in u1] + \
+       [["pp.Uniform( 2.0,  4.0)", v] for v in u2]
 df = pd.DataFrame(data, columns=["Distribution", "Value"])
 ax = sns.histplot(
     data=df,  
