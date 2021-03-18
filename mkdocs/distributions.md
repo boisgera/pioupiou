@@ -86,6 +86,7 @@ yticks = plt.yticks([0.0, 0.25, 0.5, 0.75, 1.0])
 xticks = plt.xticks([0, 1], ["False", "True"])
 text = plt.title("Bernoulli Distribution")
 plt.savefig("bernoulli.svg")
+plt.close()
 ```
 
 ![](images/bernoulli.svg)
@@ -111,8 +112,29 @@ Uniform
     0.908194704787239
 
 ```python
+pp.restart()
+U0, U1, U2 = pp.Uniform(-1.5, -1.0), pp.Uniform(0.0, 1.0),  pp.Uniform(2.0, 4.0)
+omega = pp.Omega(100000)
+u0, u1, u2 = U0(omega), U1(omega), U2(omega)
+data = [["pp.Uniform(-1.5, -1.0)", v] for v in u0] + \
+       [["pp.Uniform(0.0, 1.0)", v] for v in u1] + \
+       [["pp.Uniform(2.0, 4.0)", v] for v in u2]
+df = pd.DataFrame(data, columns=["Distribution", "Value"])
+ax = sns.histplot(
+    data=df,  
+    x="Value", 
+    hue="Distribution",
+    stat="density", 
+    bins = np.arange(-2.0, 4.5, 0.25),
+    common_norm=False, 
+)
+xticks = plt.xticks(np.arange(-2.0, 4.5, 1.0))
+text = plt.title("Uniform Distribution")
+plt.savefig("uniform.svg")
+plt.close()
 ```
 
+![](images/uniform.svg)
 
 Normal
 --------------------------------------------------------------------------------
