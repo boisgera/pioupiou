@@ -21,7 +21,7 @@ $$
 \end{array}
 $$
 
-
+For example:
 ```python
 >>> pp.restart()
 >>> B = pp.Bernoulli(0.5)
