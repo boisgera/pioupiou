@@ -126,6 +126,7 @@ We are almost sure that values sampled from `U = pp.Uniform(a, b)` are
 between `a` and `b`:
 
 ```python
+>>> pp.restart()
 >>> a, b = -3, 7
 >>> U = pp.Uniform(a, b)
 >>> omega = pp.Omega(1000)
