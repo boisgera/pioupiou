@@ -116,7 +116,7 @@ for filename in test_files:
 verbose = "-v" in sys.argv or "--verbose" in sys.argv
 build = "-b" in sys.argv or "--build" in sys.argv
 
-if build: # copy the generated images to the image folder.
+if build: # setup and teardown the src code (theming & figure cleanup)
     for filename in test_files:
         with open(filename, encoding="utf-8") as file:
             src = file.read()
@@ -126,12 +126,10 @@ if build: # copy the generated images to the image folder.
 
 """ + src + """
     >>> matplotlib.pyplot.close('all')
-    
+
 """     
         with open(filename, "w", encoding="utf-8") as file:
             file.write(src)
-    for image in glob.glob("*svg"):
-        shutil.copy(image, cwd + "/mkdocs/images/" + image)
 
 fails = 0
 tests = 0
@@ -141,7 +139,9 @@ for filename in test_files:
     fails += _fails
     tests += _tests
 
-
+if build: # copy the generated images to the images folder
+    for image in glob.glob("*svg"):
+        shutil.copy(image, cwd + "/mkdocs/images/" + image)
 
 os.chdir(cwd)
 
