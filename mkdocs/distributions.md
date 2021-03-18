@@ -286,7 +286,7 @@ c0, c1, c2 = C0(omega), C1(omega), C2(omega)
 _  = sns.histplot(
         {"Cauchy( 0.0, 1.0)": c0,
          "Cauchy(-2.0, 1.0)": c1,
-         "Cauchy(2.0, 2.0)": c2}, 
+         "Cauchy( 2.0, 2.0)": c2}, 
         stat="density", common_norm=False,
         bins=[-1e9] + list(np.linspace(-5, 5, 10*5+1)) + [1e9],
         element="step")
