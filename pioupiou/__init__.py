@@ -164,7 +164,7 @@ class Constant(RandomVariable):
         else:
             self.rv = lambda u: value
 
-    def __call__(self, omega=None):
+    def __call__(self, omega):
         return self.rv(omega)
 
 
@@ -223,7 +223,7 @@ class Cauchy(RandomVariable):
         self.x0 = randomize(x0)
         self.gamma = randomize(gamma)
 
-    def __call__(self, omega=None):
+    def __call__(self, omega):
         u = self.U(omega)
         x0 = self.x0(omega)
         gamma = self.gamma(omega)
@@ -231,7 +231,8 @@ class Cauchy(RandomVariable):
 
 
 # Nota: The scheme used here is applicable to all scipy.stats distribution ;
-#       we don't use it when we can since it's bound to be quite slow ...
+#       we don't use it when we can do something else since it's probably 
+#       quite slow ...
 class t(RandomVariable):
     def __init__(self, nu):
         self.U = Uniform()
@@ -239,7 +240,7 @@ class t(RandomVariable):
         # ppf = quantile function, see scipy.stats rv_continuous API
         self.q = np.vectorize(lambda nu, u: scipy.stats.t(nu).ppf(u))
 
-    def __call__(self, omega=None):
+    def __call__(self, omega):
         u = self.U(omega)
         nu = self.nu(omega)
         return self.q(nu, u)
