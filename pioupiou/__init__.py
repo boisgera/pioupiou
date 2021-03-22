@@ -36,11 +36,6 @@ def restart():
     Omega.__init__()
 
 
-def save():
-    snapshot = (Omega.n, Omega.rng.bit_generator.state)
-    return snapshot
-
-
 # ------------------------------------------------------------------------------
 class RandomVariable(abc.ABC):
     # Binary operators
