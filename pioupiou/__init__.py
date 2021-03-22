@@ -15,6 +15,10 @@ import wrapt
 
 class Universe:
     def __init__(self):
+        if hasattr(self, "rvs"):
+            for rv in self.rvs:
+                rv._valid = False
+        self.rvs = []    
         self.n = 0
         seed = 0
         self.ss = np.random.SeedSequence(seed)
@@ -38,7 +42,18 @@ def restart():
 
 
 # ------------------------------------------------------------------------------
+class InvalidRandomVariable(Exception):
+    pass
+
 class RandomVariable(abc.ABC):
+    def __init__(self):
+        Omega.rvs.append(self)
+        self._valid = True
+
+    def check(self):
+        if not self._valid:
+            raise InvalidRandomVariable()
+
     # Binary operators
     def __add__(self, other):
         return function(operator.add)(
@@ -142,10 +157,12 @@ def function(wrapped, instance, args, kwargs):
         def __init__(self, *args, **kwargs):  # TODO: I'd like these args and
             # kwargs to have wrapped signature and be checked against it ...
             # Does it work by default ?
+            super().__init__()
             self.args = [randomize(arg) for arg in args]
             self.kwargs = {k: randomize(v) for k, v in kwargs.items()}
 
         def __call__(self, omega):
+            self.check()
             args_values = [arg(omega) for arg in self.args]
             kwargs_values = {k: v(omega) for k, v in kwargs.items()}
             return wrapped(*args_values, **kwargs_values)
@@ -159,6 +176,7 @@ bool = function(builtins.bool)
 
 class Constant(RandomVariable):
     def __init__(self, value):
+        super().__init__()
         # Yep, the value of a constant can be randomized too.
         if isinstance(value, RandomVariable):
             self.rv = value
@@ -166,6 +184,7 @@ class Constant(RandomVariable):
             self.rv = lambda u: value
 
     def __call__(self, omega):
+        self.check()
         return self.rv(omega)
 
 
@@ -173,22 +192,26 @@ class Constant(RandomVariable):
 # ------------------------------------------------------------------------------
 class Uniform(RandomVariable):
     def __init__(self, a=0.0, b=1.0):
+        super().__init__()
         self.n = Omega.n
         Omega.n += 1
         self.a = randomize(a)
         self.b = randomize(b)
 
     def __call__(self, omega):
+        self.check()
         u_n = omega[self.n]  # localized abstraction leak HERE.
         return self.a(omega) * (1 - u_n) + self.b(omega) * u_n
 
 
 class Bernoulli(RandomVariable):
     def __init__(self, p=0.5):
+        super().__init__()
         self.U = Uniform()
         self.P = randomize(p)
 
     def __call__(self, omega):
+        self.check()
         u = self.U(omega)
         p = self.P(omega)
         return u <= p
@@ -196,11 +219,13 @@ class Bernoulli(RandomVariable):
 
 class Normal(RandomVariable):
     def __init__(self, mu=0.0, sigma2=1.0):
+        super().__init__()
         self.U = Uniform()
         self.mu = randomize(mu)
         self.sigma2 = randomize(sigma2)
 
     def __call__(self, omega):
+        self.check()
         u = self.U(omega)
         mu = self.mu(omega)
         sigma = np.sqrt(self.sigma2(omega))
@@ -209,10 +234,12 @@ class Normal(RandomVariable):
 
 class Exponential(RandomVariable):
     def __init__(self, lambda_=1.0):
+        super().__init__()
         self.U = Uniform()
         self.lambda_ = randomize(lambda_)
 
     def __call__(self, omega):
+        self.check()
         u = self.U(omega)
         lambda_ = self.lambda_(omega)
         return -np.log(1 - u) / lambda_
@@ -220,6 +247,7 @@ class Exponential(RandomVariable):
 
 class Cauchy(RandomVariable):
     def __init__(self, x0=0.0, gamma=1.0):
+        super().__init__()
         self.U = Uniform()
         self.x0 = randomize(x0)
         self.gamma = randomize(gamma)
@@ -236,10 +264,12 @@ class Cauchy(RandomVariable):
 #       quite slow ... at least in the case when we randomize the parameters.
 class t(RandomVariable):
     def __init__(self, nu):
+        super().__init__()
         self.U = Uniform()
         self.nu = nu
 
     def __call__(self, omega):
+        self.check()
         u = self.U(omega)
         # ppf = quantile function, see scipy.stats rv_continuous API
         if isinstance(self.nu, numbers.Number):

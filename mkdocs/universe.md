@@ -32,8 +32,40 @@ While this action is not mandatory, it serves two purposes:
 
 ### Invalid Random Variables
 
-**TODO.** Ensure programatically that invalid random variables throw an
-error when sampled. Then doctest the feature here.
+Every previously defined random variable become invalid when pioupiou is 
+restarted. To avoid any mistake, pioupiou ensures that you cannot call any 
+such variable.
+
+Consider the random variable `U`:
+
+```python
+pp.restart()
+U = pp.Uniform()
+```
+
+It is perfectly valid and thus can be sampled:
+
+```python
+>>> omega = pp.Omega()
+>>> U(omega)
+0.6369616873214543
+```
+
+But once pioupiou has been restarted, any attempt to sample `U` will raise 
+an exception:
+
+```python
+>>> pp.restart()
+>>> U(omega) # doctest: +ELLIPSIS
+Traceback (most recent call last):
+...
+pioupiou.InvalidRandomVariable
+>>> omega = pp.Omega()
+>>> U(omega) # doctest: +ELLIPSIS
+Traceback (most recent call last):
+...
+pioupiou.InvalidRandomVariable
+```
 
 ### Deterministic Sampling 
 
