@@ -307,8 +307,8 @@ Student
 ```python
 pp.restart()
 distribs = [
-    "pp.t(1.0)",
-    "pp.t(2.0)", 
+    "pp.t(0.1)",
+    "pp.t(1.0)", 
     "pp.t(10.0)", 
     "pp.Normal(0.0, 1.0)"
 ]
