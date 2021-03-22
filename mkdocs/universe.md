@@ -125,9 +125,9 @@ The call `pp.Omega()` merely samples these $n$ primitive random variables[^2].
 
 [^1]:
     Your universe is $\Omega = [0,1]^n$ and its probability 
-    $\mathbb{P}$ is the Lebesgue measure ; for any measurable set $A \subset [0,1]^n$,
+    $\mathbb{P}$ is the Lebesgue measure ; for any measurable set $A \subset \Omega$,
     $$
-    \mathbb{P}(A) = \int_{[0,1]^n} 1_A(\omega) \, d\omega.
+    \mathbb{P}(A) = \int_{\Omega} 1_A(\omega) \, d\omega.
     $$
     Every random variable is a (measurable) function $X :\Omega \to \mathbb{R}$.
     What we call *primitive* random variables in this context are the $n$ random variables
