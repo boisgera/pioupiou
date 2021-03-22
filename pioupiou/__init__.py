@@ -2,6 +2,7 @@
 import abc
 import builtins
 import inspect
+import numbers
 import operator
 
 # Third-Party Libraries
@@ -232,18 +233,23 @@ class Cauchy(RandomVariable):
 
 # Nota: The scheme used here is applicable to all scipy.stats distribution ;
 #       we don't use it when we can do something else since it's probably 
-#       quite slow ...
+#       quite slow ... at least in the case when we randomize the parameters.
 class t(RandomVariable):
     def __init__(self, nu):
         self.U = Uniform()
-        self.nu = randomize(nu)
-        # ppf = quantile function, see scipy.stats rv_continuous API
-        self.q = np.vectorize(lambda nu, u: scipy.stats.t(nu).ppf(u))
+        self.nu = nu
 
     def __call__(self, omega):
         u = self.U(omega)
-        nu = self.nu(omega)
-        return self.q(nu, u)
+        # ppf = quantile function, see scipy.stats rv_continuous API
+        if isinstance(self.nu, numbers.Number):
+            # fast lane
+            nu = self.nu
+            return scipy.stats.t(nu).ppf(u)
+        else: # nu is random
+            nu = self.nu(omega)
+            q = np.vectorize(lambda nu_, u_: scipy.stats.t(nu_).ppf(u_))
+            return q(nu, u)
 
 
 # ------------------------------------------------------------------------------

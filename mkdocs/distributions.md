@@ -306,14 +306,15 @@ Student
 
 ```python
 pp.restart()
-distribs = {
-    "pp.t(1.0)", 
-    "pp.t(5.0)", 
+distribs = [
+    "pp.t(1.0)",
+    "pp.t(2.0)", 
+    "pp.t(10.0)", 
     "pp.Normal(0.0, 1.0)"
-}
+]
 Ts = [eval(d) for d in distribs]
 
-omega = pp.Omega(10000)
+omega = pp.Omega(100000)
 ts = [T(omega) for T in Ts]
 data = []
 for distrib, t in zip(distribs, ts):
@@ -322,7 +323,7 @@ for distrib, t in zip(distribs, ts):
 df = pd.DataFrame(data, columns=["Distribution", "Value"])
 
 ax = sns.histplot(
-    data=df,  x="Value", hue="Distribution",
+    data=df,  x="Value", hue="Distribution", hue_order=distribs,
     stat="density", common_norm=False, 
     bins=[-1e9] + list(np.linspace(-5, 5, 10*5+1)) + [1e9],
     element="step", fill=False,
