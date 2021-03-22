@@ -296,7 +296,41 @@ _ = plt.xlim(-5.0, 5.0)
 _ = plt.title("Cauchy Distribution")
 plt.gcf().subplots_adjust(top=0.95)
 plt.savefig("cauchy-2.svg")
+plt.close()
 ```
 
-
 ![](images/cauchy-2.svg)
+
+Student
+--------------------------------------------------------------------------------
+
+```python
+pp.restart()
+distribs = {
+    "pp.t(1.0)", 
+    "pp.t(5.0)", 
+    "pp.Normal(0.0, 1.0)"
+}
+Ts = [eval(d) for d in distribs]
+
+omega = pp.Omega(10000)
+ts = [T(omega) for T in Ts]
+data = []
+for distrib, t in zip(distribs, ts):
+    data.extend([[distrib, v] for v in t])
+
+df = pd.DataFrame(data, columns=["Distribution", "Value"])
+
+ax = sns.histplot(
+    data=df,  x="Value", hue="Distribution",
+    stat="density", common_norm=False, 
+    bins=[-1e9] + list(np.linspace(-5, 5, 10*5+1)) + [1e9],
+    element="step", fill=False,
+)
+xlim = plt.xlim(-5.0, 5.0)
+title = plt.title("Student t Distribution")
+plt.savefig("student-t.svg")
+plt.close()
+```
+
+![](images/student-t.svg)
