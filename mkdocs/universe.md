@@ -32,7 +32,7 @@ While this action is not mandatory, it serves two purposes:
 
 ### Invalid Random Variables
 
-Every previously defined random variable become invalid when pioupiou is 
+Every previously defined random variable becomes invalid when pioupiou is 
 restarted. To avoid any mistake, pioupiou ensures that you cannot call any 
 such variable.
 
