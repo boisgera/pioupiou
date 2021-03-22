@@ -11,30 +11,14 @@ import scipy.special
 import scipy.stats
 import wrapt
 
-# We need to support : random init, custom seed it, continuation (save/restore)
-# What should be the default ? Init at 0 or None ? I'd rather fo with 0 here,
-# right ? And the experts could set the seed to None to get a random init.
-# But by default we are deterministic.
 
-# Yes, i'd probably rather have restart and save external ...
+class Universe:
+    def __init__(self):
+        self.n = 0
+        seed = 0
+        self.ss = np.random.SeedSequence(seed)
+        self.rng = npr.default_rng(self.ss)
 
-# UPDATE : changed the design to be more vector-friendly. Consequences :
-# the nature of every random variable as a function of omega is more explicit
-# (but the very easy use cases are slightly more verbose) and Omega is now
-# a different beast (not the API of a random thingy anymore).
-
-# NOTE : X(Omega(10)) and np.array([X(Omega(1)) for _ in range(10)]
-# won't generate the same numbers, even if the universe state is the
-# same to begin with. Because the generation of numpy.random works the
-# same (generation of random arrays and looping or partial array generation
-# won't generate the same results). NAAAAAAAH. This is probably a mistake,
-# check this and make a test to confirm ; first check this at low-level
-# (numpy.random), then in my code.
-
-
-class Universe:  # actually, looks like a random VECTOR, the only one in town so far. Funny :)
-    # I am going to break this, by replacing the omega argument (useless), with
-    # a size
     def __call__(self, size=None):
         if size is None:
             output_size = (self.n,)
@@ -45,31 +29,11 @@ class Universe:  # actually, looks like a random VECTOR, the only one in town so
         return self.rng.uniform(size=output_size)
 
 
-# TODO : need to make all distributions universe-dependent ? Urk :(
-# Or single universe at a time ? And maybe a with construct ? So that
-# in any VA invocation, a universe is bound ?
-
-Omega = Universe()  # the universe (as long as we sample the variables only once ;
-# otherwise the "true" univers is the cartesian product of this one).
-# Here U is the "universal" random vector, that sums up everything there is
-# to know about the universe.
+Omega = Universe()
 
 
-def restore(snapshot=None):
-    if snapshot is None:
-        Omega.n = 0
-        seed = 0
-        Omega.ss = np.random.SeedSequence(seed)
-        Omega.rng = npr.default_rng(Omega.ss)
-    else:
-        restore()
-        n, state = snapshot
-        Omega.n = n
-        Omega.rng.bit_generator.state = state
-
-
-restart = restore
-restore()
+def restart():
+    Omega.__init__()
 
 
 def save():
@@ -257,6 +221,7 @@ class Exponential(RandomVariable):
         lambda_ = self.lambda_(omega)
         return -np.log(1 - u) / lambda_
 
+
 class Cauchy(RandomVariable):
     def __init__(self, x0=0.0, gamma=1.0):
         self.U = Uniform()
@@ -269,6 +234,7 @@ class Cauchy(RandomVariable):
         gamma = self.gamma(omega)
         return x0 + gamma * np.tan(np.pi * (u - 0.5))
 
+
 # Nota: The scheme used here is applicable to all scipy.stats distribution ;
 #       we don't use it when we can since it's bound to be quite slow ...
 class t(RandomVariable):
@@ -278,11 +244,11 @@ class t(RandomVariable):
         # ppf = quantile function, see scipy.stats rv_continuous API
         self.q = np.vectorize(lambda nu, u: scipy.stats.t(nu).ppf(u))
 
-
     def __call__(self, omega=None):
         u = self.U(omega)
         nu = self.nu(omega)
         return self.q(nu, u)
+
 
 # ------------------------------------------------------------------------------
 for name in dir(np):
