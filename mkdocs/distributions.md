@@ -184,28 +184,83 @@ plt.close()
 Normal
 --------------------------------------------------------------------------------
 
-    >>> pp.restart()
-    >>> N = pp.Normal()
-    >>> omega = pp.Omega()
-    >>> N(omega)
-    0.3503492272565639
+The snippet `N = pp.Normal(mu, sigma**2)` creates a random variable $N$ with density
+$$
+f(x) = \frac{1}{\sqrt{2\pi \sigma^2}} \exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right).
+$$
 
-    >>> pp.restart()
-    >>> N = pp.Normal(0.0, (1.0)**2)
-    >>> omega = pp.Omega()
-    >>> N(omega)
-    0.3503492272565639
+The default values of `mu` and `sigma**2` are `0.0` and `1.0`:
 
-    >>> pp.restart()
-    >>> N = pp.Normal(1.0, (0.1)**2)
-    >>> omega = pp.Omega(1000)
-    >>> n = N(omega)
-    >>> n # doctest: +ELLIPSIS
-    array([1.03503492, 0.93865418, 0.82605011, ..., 0.969454  ])
-    >>> np.mean(n)
-    1.004904221840834
-    >>> np.std(n)
-    0.09904019518744091
+```python
+>>> pp.restart()
+>>> N = pp.Normal()
+>>> omega = pp.Omega()
+>>> N(omega)
+0.3503492272565639
+```
+
+```python
+>>> pp.restart()
+>>> N = pp.Normal(0.0, 1.0)
+>>> omega = pp.Omega()
+>>> N(omega)
+0.3503492272565639
+```
+
+
+The parameters $\mu \in \mathbb{R}$ and $\sigma > 0$ are the mean and standard 
+deviation of the random variable:
+
+```python
+>>> pp.restart()
+>>> N = pp.Normal(1.0, (0.1)**2)
+>>> omega = pp.Omega(100000)
+>>> n = N(omega)
+>>> n # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
+array([1.03503492, 0.93865418, 0.82605011, ..., 1.00156987])
+>>> np.mean(n)
+0.9998490788460421
+>>> np.std(n)
+0.09990891658278829
+```
+
+Let's visualize some normal distributions:
+
+```python
+# Modeling and Simulation
+pp.restart()
+distribs = [
+    "pp.Normal( 0.0, 1.0)", 
+    "pp.Normal(-2.0, 1.0)", 
+    "pp.Normal( 2.0, 2.0)"
+]
+Xs = [eval(distrib) for distrib in distribs]
+omega = pp.Omega(100000)
+xs = [X(omega) for X in Xs]
+
+# Data Frame (long-form)
+data = []
+for distrib, x in zip(distribs, xs):
+    data.extend([[distrib, value] for value in x])
+
+df = pd.DataFrame(data, columns=["Distribution", "Value"])
+
+# Visualization
+ax = sns.histplot(
+    data=df,  
+    x="Value", 
+    hue="Distribution",
+    stat="density", common_norm=False,
+    bins=[-1e9] + list(np.linspace(-5, 5, 10*5+1)) + [1e9],
+    element="step"
+)
+xlim = plt.xlim(-5.0, 5.0)
+title = plt.title("Normal Distribution")
+plt.savefig("normal.svg")
+plt.close()
+```
+
+![](images/normal.svg)
 
 Exponential
 --------------------------------------------------------------------------------
@@ -304,7 +359,6 @@ ax = sns.histplot(
 )
 xlim = plt.xlim(-5.0, 5.0)
 title = plt.title("Cauchy Distribution")
-plt.gcf().subplots_adjust(top=0.95)
 plt.savefig("cauchy-1.svg")
 plt.close()
 ```
@@ -342,7 +396,6 @@ ax = sns.histplot(
 )
 xlim = plt.xlim(-5.0, 5.0)
 title = plt.title("Cauchy Distribution")
-plt.gcf().subplots_adjust(top=0.95)
 plt.savefig("cauchy-2.svg")
 plt.close()
 ```
