@@ -62,7 +62,7 @@ True
 With a larger number of independent samples, we can check these probabilities 
 in a histogram
 ```python
-# Model and Simulation
+# Modeling and Simulation
 pp.restart()
 distribs = [
     "pp.Bernoulli(0.0)", 
@@ -146,7 +146,7 @@ True
 
 Let's visualize some examples of the uniform distribution
 ```python
-# Model and Simulation
+# Modeling and Simulation
 pp.restart()
 distribs = [
     "pp.Uniform(-1.5, -1.0)",
@@ -230,7 +230,7 @@ Exponential
 
 
 ```python
-# Model and Simulation
+# Modeling and Simulation
 pp.restart()
 distribs = [
     "pp.Exponential(0.5)",
@@ -313,7 +313,7 @@ plt.close()
 
 
 ```python
-# Model and Simulation
+# Modeling and Simulation
 pp.restart()
 distribs = [
     "pp.Cauchy( 0.0, 1.0)", 
@@ -353,7 +353,7 @@ Student
 --------------------------------------------------------------------------------
 
 ```python
-# Model and Simulation
+# Modeling and Simulation
 pp.restart()
 distribs = [
     "pp.t(0.1)",
