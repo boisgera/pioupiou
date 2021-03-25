@@ -62,23 +62,26 @@ True
 With a larger number of independent samples, we can check these probabilities 
 in a histogram
 ```python
+# Model and Simulation
 pp.restart()
 distribs = [
     "pp.Bernoulli(0.0)", 
     "pp.Bernoulli(0.25)", 
     "pp.Bernoulli(0.5)", 
-    "pp.Bernoulli()"]
-Xs = [eval(s) for s in distribs]
+    "pp.Bernoulli()"
+]
+Xs = [eval(distrib) for distrib in distribs]
 omega = pp.Omega(100000)
 xs = [X(omega) for X in Xs]
 
-# Data frame (long-form)
+# Data Frame (long-form)
 data = []
 for distrib, x in zip(distribs, xs):
     data.extend([[distrib, int(value)] for value in x])
 
 df = pd.DataFrame(data, columns=["Distribution", "Value"])
 
+# Visualization
 ax = sns.histplot(
     data=df,  
     x="Value", 
@@ -91,7 +94,7 @@ ax = sns.histplot(
 )
 yticks = plt.yticks([0.0, 0.25, 0.5, 0.75, 1.0])
 xticks = plt.xticks([0, 1], ["False", "True"])
-text = plt.title("Bernoulli Distribution")
+title = plt.title("Bernoulli Distribution")
 plt.savefig("bernoulli.svg")
 plt.close()
 ```
@@ -143,16 +146,25 @@ True
 
 Let's visualize some examples of the uniform distribution
 ```python
+# Model and Simulation
 pp.restart()
-U0 = pp.Uniform(-1.5, -1.0)
-U1 = pp.Uniform( 0.0,  1.0)
-U2 = pp.Uniform( 2.0,  4.0)
+distribs = [
+    "pp.Uniform(-1.5, -1.0)",
+    "pp.Uniform( 0.0,  1.0)",
+    "pp.Uniform( 2.0,  4.0)"
+]
+Xs = [eval(distrib) for distrib in distribs]
 omega = pp.Omega(100000)
-u0, u1, u2 = U0(omega), U1(omega), U2(omega)
-data = [["pp.Uniform(-1.5, -1.0)", v] for v in u0] + \
-       [["pp.Uniform( 0.0,  1.0)", v] for v in u1] + \
-       [["pp.Uniform( 2.0,  4.0)", v] for v in u2]
+xs = [X(omega) for X in Xs]
+
+# Data Frame (long-form)
+data = []
+for distrib, x in zip(distribs, xs):
+    data.extend([[distrib, value] for value in x])
+
 df = pd.DataFrame(data, columns=["Distribution", "Value"])
+
+# Visualization
 ax = sns.histplot(
     data=df,  
     x="Value", 
@@ -162,7 +174,7 @@ ax = sns.histplot(
     common_norm=False, 
 )
 xticks = plt.xticks(np.arange(-2.0, 4.5, 1.0))
-text = plt.title("Uniform Distribution")
+title = plt.title("Uniform Distribution")
 plt.savefig("uniform.svg")
 plt.close()
 ```
@@ -218,24 +230,37 @@ Exponential
 
 
 ```python
+# Model and Simulation
 pp.restart()
-E0 = pp.Exponential(0.5)
-E1 = pp.Exponential(1.0)
-E2 = pp.Exponential(2.0)
-omega = pp.Omega(10000)
-e0, e1, e2 = E0(omega), E1(omega), E2(omega)
+distribs = [
+    "pp.Exponential(0.5)",
+    "pp.Exponential(1.0)",
+    "pp.Exponential(2.0)"
+]
+Xs = [eval(distrib) for distrib in distribs]
+omega = pp.Omega(100000)
+xs = [X(omega) for X in Xs]
 
-_  = sns.histplot(
-        {"Exponential(0.5)": e0, 
-         "Exponential(1.0)": e1, 
-         "Exponential(2.0)": e2}, 
-        stat="density", common_norm=False,
-        element="step"
-       )
-_ = plt.xlim(0.0, 5.0)
-_ = plt.title("Exponential Distribution")
-plt.gcf().subplots_adjust(top=0.95)
+# Data Frame (long-form)
+data = []
+for distrib, x in zip(distribs, xs):
+    data.extend([[distrib, value] for value in x])
+
+df = pd.DataFrame(data, columns=["Distribution", "Value"])
+
+# Visualization
+ax = sns.histplot(
+    data=df,  
+    x="Value", 
+    hue="Distribution",
+    stat="density", 
+    common_norm=False,
+    element="step"
+)
+xlim = plt.xlim(0.0, 5.0)
+title = plt.title("Exponential Distribution")
 plt.savefig("exponential.svg")
+plt.close()
 ```
 
 ![](images/exponential.svg)
@@ -267,39 +292,56 @@ $$
     3.181434516919701
 
 ```python
-plt.close(); pp.restart()
+pp.restart()
 C = pp.Cauchy()
 omega = pp.Omega(100000)
 c = C(omega)
-_  = sns.histplot(
-        {"Cauchy()": c}, 
-        stat="density",
-        bins=[-1e9] + list(np.linspace(-5, 5, 10*5+1)) + [1e9],
-        element="step"
-        )
-_ = plt.xlim(-5.0, 5.0)
-_ = plt.title("Cauchy Distribution")
+ax = sns.histplot(
+    {"Cauchy()": c}, 
+    stat="density",
+    bins=[-1e9] + list(np.linspace(-5, 5, 10*5+1)) + [1e9],
+    element="step"
+)
+xlim = plt.xlim(-5.0, 5.0)
+title = plt.title("Cauchy Distribution")
 plt.gcf().subplots_adjust(top=0.95)
 plt.savefig("cauchy-1.svg")
+plt.close()
 ```
 
 ![](images/cauchy-1.svg)
 
 
 ```python
-plt.close(); pp.restart()
-C0, C1, C2 = pp.Cauchy(0.0, 1.0), pp.Cauchy(-2.0, 1.0), pp.Cauchy(2.0, 2.0)
+# Model and Simulation
+pp.restart()
+distribs = [
+    "pp.Cauchy( 0.0, 1.0)", 
+    "pp.Cauchy(-2.0, 1.0)", 
+    "pp.Cauchy( 2.0, 2.0)"
+]
+Xs = [eval(distrib) for distrib in distribs]
 omega = pp.Omega(100000)
-c0, c1, c2 = C0(omega), C1(omega), C2(omega)
-_  = sns.histplot(
-        {"Cauchy( 0.0, 1.0)": c0,
-         "Cauchy(-2.0, 1.0)": c1,
-         "Cauchy( 2.0, 2.0)": c2}, 
-        stat="density", common_norm=False,
-        bins=[-1e9] + list(np.linspace(-5, 5, 10*5+1)) + [1e9],
-        element="step")
-_ = plt.xlim(-5.0, 5.0)
-_ = plt.title("Cauchy Distribution")
+xs = [X(omega) for X in Xs]
+
+# Data Frame (long-form)
+data = []
+for distrib, x in zip(distribs, xs):
+    data.extend([[distrib, value] for value in x])
+
+df = pd.DataFrame(data, columns=["Distribution", "Value"])
+
+# Visualization
+ax = sns.histplot(
+    data=df,  
+    x="Value", 
+    hue="Distribution",
+    stat="density", common_norm=False,
+    bins=[-1e9] + list(np.linspace(-5, 5, 10*5+1)) + [1e9],
+    element="step"
+)
+xlim = plt.xlim(-5.0, 5.0)
+title = plt.title("Cauchy Distribution")
 plt.gcf().subplots_adjust(top=0.95)
 plt.savefig("cauchy-2.svg")
 plt.close()
@@ -311,6 +353,7 @@ Student
 --------------------------------------------------------------------------------
 
 ```python
+# Model and Simulation
 pp.restart()
 distribs = [
     "pp.t(0.1)",
@@ -318,16 +361,18 @@ distribs = [
     "pp.t(10.0)", 
     "pp.Normal(0.0, 1.0)"
 ]
-Ts = [eval(d) for d in distribs]
-
+Xs = [eval(distrib) for distrib in distribs]
 omega = pp.Omega(100000)
-ts = [T(omega) for T in Ts]
+xs = [X(omega) for X in Xs]
+
+# Data Frame (long-form)
 data = []
-for distrib, t in zip(distribs, ts):
-    data.extend([[distrib, v] for v in t])
+for distrib, x in zip(distribs, xs):
+    data.extend([[distrib, value] for value in x])
 
 df = pd.DataFrame(data, columns=["Distribution", "Value"])
 
+# Visualization
 ax = sns.histplot(
     data=df,  x="Value", hue="Distribution", hue_order=distribs,
     stat="density", common_norm=False, 
