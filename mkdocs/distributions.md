@@ -9,6 +9,29 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 ```
 
+To streamline the visualization of distributions in this document, we introduce 
+a helper function `long_form_data`. It instantiates some distributions,
+simulate them and return the results as a [long-form dataframe](https://seaborn.pydata.org/tutorial/data_structure.html) with column names `"Distribution"` and `"Value"`. 
+Its arguments are:
+
+  - `distribs`: strings that should eval to random variables,
+
+  - `n`: number of samples used for the simulation (default: `100000`)
+
+```python
+def long_form_data(*distribs, n=100000):
+    # Modeling and Simulation
+    pp.restart()
+    Xs = [eval(distrib) for distrib in distribs] # random variables
+    omega = pp.Omega(n)
+    xs = [X(omega) for X in Xs]
+    # Long-form Data Frame
+    data = []
+    for distrib, x in zip(distribs, xs):
+        data.extend([[distrib, np.float64(value)] for value in x])
+    return pd.DataFrame(data, columns=["Distribution", "Value"])
+```
+
 Bernoulli
 --------------------------------------------------------------------------------
 
@@ -62,24 +85,12 @@ True
 With a larger number of independent samples, we can check these probabilities 
 in a histogram
 ```python
-# Modeling and Simulation
-pp.restart()
-distribs = [
+df = long_form_data(
     "pp.Bernoulli(0.0)", 
     "pp.Bernoulli(0.25)", 
     "pp.Bernoulli(0.5)", 
     "pp.Bernoulli()"
-]
-Xs = [eval(distrib) for distrib in distribs]
-omega = pp.Omega(100000)
-xs = [X(omega) for X in Xs]
-
-# Data Frame (long-form)
-data = []
-for distrib, x in zip(distribs, xs):
-    data.extend([[distrib, int(value)] for value in x])
-
-df = pd.DataFrame(data, columns=["Distribution", "Value"])
+)
 
 # Visualization
 ax = sns.histplot(
@@ -146,25 +157,12 @@ True
 
 Let's visualize some examples of the uniform distribution
 ```python
-# Modeling and Simulation
-pp.restart()
-distribs = [
+df = long_form_data(
     "pp.Uniform(-1.5, -1.0)",
     "pp.Uniform( 0.0,  1.0)",
     "pp.Uniform( 2.0,  4.0)"
-]
-Xs = [eval(distrib) for distrib in distribs]
-omega = pp.Omega(100000)
-xs = [X(omega) for X in Xs]
+)
 
-# Data Frame (long-form)
-data = []
-for distrib, x in zip(distribs, xs):
-    data.extend([[distrib, value] for value in x])
-
-df = pd.DataFrame(data, columns=["Distribution", "Value"])
-
-# Visualization
 ax = sns.histplot(
     data=df,  
     x="Value", 
@@ -227,25 +225,12 @@ array([1.03503492, 0.93865418, 0.82605011, ..., 1.00156987])
 Let's visualize some normal distributions:
 
 ```python
-# Modeling and Simulation
-pp.restart()
-distribs = [
+df = long_form_data(
     "pp.Normal( 0.0, 1.0)", 
     "pp.Normal(-2.0, 1.0)", 
     "pp.Normal( 2.0, 2.0)"
-]
-Xs = [eval(distrib) for distrib in distribs]
-omega = pp.Omega(100000)
-xs = [X(omega) for X in Xs]
+)
 
-# Data Frame (long-form)
-data = []
-for distrib, x in zip(distribs, xs):
-    data.extend([[distrib, value] for value in x])
-
-df = pd.DataFrame(data, columns=["Distribution", "Value"])
-
-# Visualization
 ax = sns.histplot(
     data=df,  
     x="Value", 
@@ -285,25 +270,12 @@ Exponential
 
 
 ```python
-# Modeling and Simulation
-pp.restart()
-distribs = [
+df = long_form_data(
     "pp.Exponential(0.5)",
     "pp.Exponential(1.0)",
     "pp.Exponential(2.0)"
-]
-Xs = [eval(distrib) for distrib in distribs]
-omega = pp.Omega(100000)
-xs = [X(omega) for X in Xs]
+)
 
-# Data Frame (long-form)
-data = []
-for distrib, x in zip(distribs, xs):
-    data.extend([[distrib, value] for value in x])
-
-df = pd.DataFrame(data, columns=["Distribution", "Value"])
-
-# Visualization
 ax = sns.histplot(
     data=df,  
     x="Value", 
@@ -347,45 +319,12 @@ $$
     3.181434516919701
 
 ```python
-pp.restart()
-C = pp.Cauchy()
-omega = pp.Omega(100000)
-c = C(omega)
-ax = sns.histplot(
-    {"Cauchy()": c}, 
-    stat="density",
-    bins=[-1e9] + list(np.linspace(-5, 5, 10*5+1)) + [1e9],
-    element="step"
-)
-xlim = plt.xlim(-5.0, 5.0)
-title = plt.title("Cauchy Distribution")
-plt.savefig("cauchy-1.svg")
-plt.close()
-```
-
-![](images/cauchy-1.svg)
-
-
-```python
-# Modeling and Simulation
-pp.restart()
-distribs = [
+df = long_form_data(
     "pp.Cauchy( 0.0, 1.0)", 
     "pp.Cauchy(-2.0, 1.0)", 
     "pp.Cauchy( 2.0, 2.0)"
-]
-Xs = [eval(distrib) for distrib in distribs]
-omega = pp.Omega(100000)
-xs = [X(omega) for X in Xs]
+)
 
-# Data Frame (long-form)
-data = []
-for distrib, x in zip(distribs, xs):
-    data.extend([[distrib, value] for value in x])
-
-df = pd.DataFrame(data, columns=["Distribution", "Value"])
-
-# Visualization
 ax = sns.histplot(
     data=df,  
     x="Value", 
@@ -396,36 +335,23 @@ ax = sns.histplot(
 )
 xlim = plt.xlim(-5.0, 5.0)
 title = plt.title("Cauchy Distribution")
-plt.savefig("cauchy-2.svg")
+plt.savefig("cauchy.svg")
 plt.close()
 ```
 
-![](images/cauchy-2.svg)
+![](images/cauchy.svg)
 
 Student
 --------------------------------------------------------------------------------
 
 ```python
-# Modeling and Simulation
-pp.restart()
-distribs = [
+df = long_form_data(
     "pp.t(0.1)",
     "pp.t(1.0)", 
     "pp.t(10.0)", 
     "pp.Normal(0.0, 1.0)"
-]
-Xs = [eval(distrib) for distrib in distribs]
-omega = pp.Omega(100000)
-xs = [X(omega) for X in Xs]
+)
 
-# Data Frame (long-form)
-data = []
-for distrib, x in zip(distribs, xs):
-    data.extend([[distrib, value] for value in x])
-
-df = pd.DataFrame(data, columns=["Distribution", "Value"])
-
-# Visualization
 ax = sns.histplot(
     data=df,  x="Value", hue="Distribution", hue_order=distribs,
     stat="density", common_norm=False, 
@@ -445,27 +371,14 @@ Beta
 --------------------------------------------------------------------------------
 
 ```python
-# Modeling and Simulation
-pp.restart()
-distribs = [
+df = long_form_data(
     "pp.Beta(0.5, 0.5)",
     "pp.Beta(5.0, 1.0)",
     "pp.Beta(1.0, 3.0)",
     "pp.Beta(2.0, 2.0)",
     "pp.Beta(2.0, 5.0)"
-]
-Xs = [eval(distrib) for distrib in distribs]
-omega = pp.Omega(100000)
-xs = [X(omega) for X in Xs]
+)
 
-# Data Frame (long-form)
-data = []
-for distrib, x in zip(distribs, xs):
-    data.extend([[distrib, value] for value in x])
-
-df = pd.DataFrame(data, columns=["Distribution", "Value"])
-
-# Visualization
 ax = sns.histplot(
     data=df,  
     x="Value", 
