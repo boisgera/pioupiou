@@ -439,3 +439,47 @@ plt.close()
 ```
 
 ![](images/student-t.svg)
+
+
+Beta
+--------------------------------------------------------------------------------
+
+```python
+# Modeling and Simulation
+pp.restart()
+distribs = [
+    "pp.Beta(0.5, 0.5)",
+    "pp.Beta(5.0, 1.0)",
+    "pp.Beta(1.0, 3.0)",
+    "pp.Beta(2.0, 2.0)",
+    "pp.Beta(2.0, 5.0)"
+]
+Xs = [eval(distrib) for distrib in distribs]
+omega = pp.Omega(100000)
+xs = [X(omega) for X in Xs]
+
+# Data Frame (long-form)
+data = []
+for distrib, x in zip(distribs, xs):
+    data.extend([[distrib, value] for value in x])
+
+df = pd.DataFrame(data, columns=["Distribution", "Value"])
+
+# Visualization
+ax = sns.histplot(
+    data=df,  
+    x="Value", 
+    hue="Distribution",
+    stat="density", 
+    common_norm=False,
+    element="step",
+    fill=False
+)
+xlim = plt.xlim(0.0, 1.0)
+ylim = plt.ylim(0.0, 4.0)
+title = plt.title("Beta Distribution")
+plt.savefig("beta.svg")
+plt.close()
+```
+
+![](images/beta.svg)

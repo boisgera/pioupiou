@@ -274,6 +274,21 @@ class t(RandomVariable):
         return scipy.special.stdtrit(nu, u)
 
 
+class Beta(RandomVariable):
+    def __init__(self, alpha, beta):
+        super().__init__()
+        self.U = Uniform()
+        self.A = randomize(alpha)
+        self.B = randomize(beta)
+
+    def __call__(self, omega):
+        self.check()
+        u = self.U(omega)
+        alpha = self.A(omega)
+        beta = self.B(omega)
+        return scipy.special.btdtri(alpha, beta, u)
+
+
 # ------------------------------------------------------------------------------
 for name in dir(np):
     item = getattr(np, name)
