@@ -92,7 +92,6 @@ df = long_form_data(
     "pp.Bernoulli()"
 )
 
-# Visualization
 ax = sns.histplot(
     data=df,  
     x="Value", 
