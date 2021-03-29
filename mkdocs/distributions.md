@@ -112,6 +112,52 @@ plt.close()
 
 ![](images/bernoulli.svg)
 
+Binomial
+--------------------------------------------------------------------------------
+
+When $n \in \mathbb{N}$ and $p \in [0,1]$,
+the code `B = pp.Binomial(n, p)` instantiates a random variable $B$ with
+probability mass function
+$$
+f(k) 
+= 
+\left( 
+\begin{array}{c} 
+n \\\\ k 
+\end{array} 
+\right) p^k (1-p)^{n-k}
+$$
+for $k \in \{0,n\}$ and $f(k)=0$ otherwise.
+The parameter $p$ has a default value of $0.5$.
+
+```python
+df = long_form_data(
+    "pp.Binomial(5      )", 
+    "pp.Binomial(5, 0.5 )",
+    "pp.Binomial(5, 0.25)",
+    "pp.Binomial(5, 0.75)", 
+)
+
+# Visualization
+ax = sns.histplot(
+    data=df,  
+    x="Value", 
+    hue="Distribution",
+    stat="probability", 
+    common_norm=False, 
+    multiple="dodge", 
+    discrete=True, 
+    shrink=0.5
+)
+yticks = plt.yticks([0.0, 0.125, 0.25, 0.375, 0.5])
+#xticks = plt.xticks([0, 1], ["False", "True"])
+title = plt.title("Binomial Distribution")
+plt.savefig("binomial.svg")
+plt.close()
+```
+
+![](images/binomial.svg)
+
 Uniform
 --------------------------------------------------------------------------------
 

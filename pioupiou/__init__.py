@@ -217,6 +217,16 @@ class Bernoulli(RandomVariable):
         p = self.P(omega)
         return u <= p
 
+class Binomial(RandomVariable):
+    def __init__(self, n, p=0.5):
+        super().__init__()
+        self.Bs = [Bernoulli(p) for _ in range(n)]
+
+    def __call__(self, omega):
+        self.check()
+        bs = [B(omega) for B in self.Bs]
+        return sum(bs)
+
 
 class Normal(RandomVariable):
     def __init__(self, mu=0.0, sigma2=1.0):
