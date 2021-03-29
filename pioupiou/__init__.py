@@ -18,7 +18,7 @@ class Universe:
         if hasattr(self, "rvs"):
             for rv in self.rvs:
                 rv._valid = False
-        self.rvs = []    
+        self.rvs = []
         self.n = 0
         seed = 0
         self.ss = np.random.SeedSequence(seed)
@@ -44,6 +44,7 @@ def restart():
 # ------------------------------------------------------------------------------
 class InvalidRandomVariable(Exception):
     pass
+
 
 class RandomVariable(abc.ABC):
     def __init__(self):
@@ -259,27 +260,17 @@ class Cauchy(RandomVariable):
         return x0 + gamma * np.tan(np.pi * (u - 0.5))
 
 
-# Nota: The scheme used here is applicable to all scipy.stats distribution ;
-#       we don't use it when we can do something else since it's probably 
-#       quite slow ... at least in the case when we randomize the parameters.
 class t(RandomVariable):
     def __init__(self, nu):
         super().__init__()
         self.U = Uniform()
-        self.nu = nu
+        self.N = randomize(nu)
 
     def __call__(self, omega):
         self.check()
         u = self.U(omega)
-        # ppf = quantile function, see scipy.stats rv_continuous API
-        if isinstance(self.nu, numbers.Number):
-            # fast lane
-            nu = self.nu
-            return scipy.stats.t(nu).ppf(u)
-        else: # nu is random
-            nu = self.nu(omega)
-            q = np.vectorize(lambda nu_, u_: scipy.stats.t(nu_).ppf(u_))
-            return q(nu, u)
+        nu = self.N(omega)
+        return scipy.special.stdtrit(nu, u)
 
 
 # ------------------------------------------------------------------------------
