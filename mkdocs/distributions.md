@@ -11,7 +11,7 @@ import seaborn as sns
 
 To streamline the visualization of distributions in this document, we introduce 
 a helper function `long_form_data`. It instantiates some distributions,
-simulate them and return the results as a [long-form dataframe](https://seaborn.pydata.org/tutorial/data_structure.html) with column names `"Distribution"` and `"Value"`. 
+simulates them and returns the results as a [long-form dataframe](https://seaborn.pydata.org/tutorial/data_structure.html) with column names `"Distribution"` and `"Value"`. 
 Its arguments are:
 
   - `distribs`: strings that should eval to random variables,
