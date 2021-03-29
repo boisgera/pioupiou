@@ -137,7 +137,6 @@ df = long_form_data(
     "pp.Binomial(5, 0.75)", 
 )
 
-# Visualization
 ax = sns.histplot(
     data=df,  
     x="Value", 
