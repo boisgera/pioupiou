@@ -353,7 +353,7 @@ df = long_form_data(
 )
 
 ax = sns.histplot(
-    data=df,  x="Value", hue="Distribution", hue_order=distribs,
+    data=df,  x="Value", hue="Distribution",
     stat="density", common_norm=False, 
     bins=[-1e9] + list(np.linspace(-5, 5, 10*5+1)) + [1e9],
     element="step", fill=False,
