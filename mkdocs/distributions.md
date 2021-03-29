@@ -150,7 +150,6 @@ ax = sns.histplot(
     shrink=0.5
 )
 yticks = plt.yticks([0.0, 0.125, 0.25, 0.375, 0.5])
-#xticks = plt.xticks([0, 1], ["False", "True"])
 title = plt.title("Binomial Distribution")
 plt.savefig("binomial.svg")
 plt.close()
