@@ -254,6 +254,7 @@ class Cauchy(RandomVariable):
         self.gamma = randomize(gamma)
 
     def __call__(self, omega):
+        self.check()
         u = self.U(omega)
         x0 = self.x0(omega)
         gamma = self.gamma(omega)
