@@ -131,8 +131,8 @@ The parameter $p$ has a default value of $0.5$.
 
 ```python
 df = long_form_data(
-    "pp.Binomial(5      )", 
-    "pp.Binomial(5, 0.5 )",
+    "pp.Binomial(5)", 
+    "pp.Binomial(5, 0.50)",
     "pp.Binomial(5, 0.25)",
     "pp.Binomial(5, 0.75)", 
 )
