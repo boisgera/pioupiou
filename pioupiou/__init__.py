@@ -227,6 +227,21 @@ class Binomial(RandomVariable):
         bs = [B(omega) for B in self.Bs]
         return sum(bs)
 
+class Poisson(RandomVariable):
+    def __init__(self, lambda_):
+        super().__init__()
+        self.L = randomize(lambda_)
+        self.U = Uniform()
+
+    def __call__(self, omega):
+        self.check()
+        lambda_ = self.L(omega)
+        u = self.U(omega)
+        # Source: scipy `_discrete_distns.py`
+        vals = np.ceil(scipy.special.pdtrik(u, lambda_))
+        vals_minus_1 = np.maximum(vals - 1, 0)
+        temp = scipy.special.pdtr(vals_minus_1, lambda_)
+        return np.where(u <= temp, vals_minus_1, vals)
 
 class Normal(RandomVariable):
     def __init__(self, mu=0.0, sigma2=1.0):

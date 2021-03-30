@@ -155,6 +155,45 @@ plt.close()
 
 ![](images/binomial.svg)
 
+Poisson
+--------------------------------------------------------------------------------
+
+The code `pp.Poisson(lambda_)` creates 
+a random variable with probability mass function
+$$
+f(k) 
+= 
+\lambda^k \frac{e^{-\lambda}}{k!}, \; k \in \mathbb{N}
+$$
+and $f(k)=0$ otherwise. The parameter $\lambda$ should be
+real and positive.
+
+```python
+df = long_form_data(
+    "pp.Poisson(1.0)", 
+    "pp.Poisson(2.0)",
+    "pp.Poisson(4.0)",
+    "pp.Binomial(100, 0.04)"
+)
+
+ax = sns.histplot(
+    data=df,  
+    x="Value", 
+    hue="Distribution",
+    stat="probability", 
+    common_norm=False, 
+    multiple="dodge", 
+    discrete=True, 
+    shrink=0.8
+)
+xlim = plt.xlim(-1.0, 11.0)
+title = plt.title("Poisson Distribution")
+plt.savefig("poisson.svg")
+plt.close()
+```
+
+![](images/poisson.svg)
+
 Uniform
 --------------------------------------------------------------------------------
 
