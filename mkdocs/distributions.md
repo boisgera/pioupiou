@@ -203,7 +203,7 @@ $$
 f(x) = \frac{1}{b-a} \; \mbox{ if } \; a \leq x \leq b, 
 $$
 and $f(x)= 0$ otherwise. The default value of `a` is `0.0` and the default value
-of `b` is 1.0, this `U = pp.Uniform()` is equivalent to `U = pp.Uniform(0,1)`.
+of `b` is 1.0, thus `U = pp.Uniform()` is equivalent to `U = pp.Uniform(0,1)`.
 
 For example
 
