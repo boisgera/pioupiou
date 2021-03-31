@@ -228,7 +228,7 @@ array([0.01652764, 0.81327024])
 ```
 
 As a special case, constant random variables
-– which depend deterministically of zero random variables - 
+– which depend deterministically on zero existing random variables - 
 do not increase the size of the universe either:
 
 ```python
