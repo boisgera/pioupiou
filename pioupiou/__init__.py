@@ -42,7 +42,13 @@ def restart():
 
 
 # ------------------------------------------------------------------------------
-class InvalidRandomVariable(Exception):
+class Error(Exception):
+    pass
+
+class InvalidRandomVariable(Error):
+    pass
+
+class InvalidSample(Error):
     pass
 
 
@@ -51,9 +57,12 @@ class RandomVariable(abc.ABC):
         Omega.rvs.append(self)
         self._valid = True
 
-    def check(self):
+    def check(self, omega):
         if not self._valid:
             raise InvalidRandomVariable()
+        if len(omega) != Omega.n:
+            error = "sample omega does not match the current universe size"
+            raise InvalidSample(error)
 
     # Binary operators
     def __add__(self, other):
@@ -163,7 +172,7 @@ def function(wrapped, instance, args, kwargs):
             self.kwargs = {k: randomize(v) for k, v in kwargs.items()}
 
         def __call__(self, omega):
-            self.check()
+            self.check(omega)
             args_values = [arg(omega) for arg in self.args]
             kwargs_values = {k: v(omega) for k, v in kwargs.items()}
             return wrapped(*args_values, **kwargs_values)
@@ -185,7 +194,7 @@ class Constant(RandomVariable):
             self.rv = lambda u: value
 
     def __call__(self, omega):
-        self.check()
+        self.check(omega)
         return self.rv(omega)
 
 
@@ -200,7 +209,7 @@ class Uniform(RandomVariable):
         self.b = randomize(b)
 
     def __call__(self, omega):
-        self.check()
+        self.check(omega)
         u_n = omega[self.n]  # localized abstraction leak HERE.
         return self.a(omega) * (1 - u_n) + self.b(omega) * u_n
 
@@ -212,7 +221,7 @@ class Bernoulli(RandomVariable):
         self.P = randomize(p)
 
     def __call__(self, omega):
-        self.check()
+        self.check(omega)
         u = self.U(omega)
         p = self.P(omega)
         return u <= p
@@ -223,7 +232,7 @@ class Binomial(RandomVariable):
         self.Bs = [Bernoulli(p) for _ in range(n)]
 
     def __call__(self, omega):
-        self.check()
+        self.check(omega)
         bs = [B(omega) for B in self.Bs]
         return sum(bs)
 
@@ -234,7 +243,7 @@ class Poisson(RandomVariable):
         self.U = Uniform()
 
     def __call__(self, omega):
-        self.check()
+        self.check(omega)
         lambda_ = self.L(omega)
         u = self.U(omega)
         # Source: scipy `_discrete_distns.py`
@@ -251,7 +260,7 @@ class Normal(RandomVariable):
         self.sigma2 = randomize(sigma2)
 
     def __call__(self, omega):
-        self.check()
+        self.check(omega)
         u = self.U(omega)
         mu = self.mu(omega)
         sigma = np.sqrt(self.sigma2(omega))
@@ -265,7 +274,7 @@ class Exponential(RandomVariable):
         self.lambda_ = randomize(lambda_)
 
     def __call__(self, omega):
-        self.check()
+        self.check(omega)
         u = self.U(omega)
         lambda_ = self.lambda_(omega)
         return -np.log(1 - u) / lambda_
@@ -279,7 +288,7 @@ class Cauchy(RandomVariable):
         self.gamma = randomize(gamma)
 
     def __call__(self, omega):
-        self.check()
+        self.check(omega)
         u = self.U(omega)
         x0 = self.x0(omega)
         gamma = self.gamma(omega)
@@ -293,7 +302,7 @@ class t(RandomVariable):
         self.N = randomize(nu)
 
     def __call__(self, omega):
-        self.check()
+        self.check(omega)
         u = self.U(omega)
         nu = self.N(omega)
         return scipy.special.stdtrit(nu, u)
@@ -307,7 +316,7 @@ class Beta(RandomVariable):
         self.B = randomize(beta)
 
     def __call__(self, omega):
-        self.check()
+        self.check(omega)
         u = self.U(omega)
         alpha = self.A(omega)
         beta = self.B(omega)

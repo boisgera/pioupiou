@@ -30,7 +30,7 @@ While this action is not mandatory, it serves two purposes:
 [^3]: You may not appreciate this feature but it is terrific when you are 
     testing models since your execution is repeatable.
 
-### Invalid Random Variables
+### Invalid Operations
 
 Every previously defined random variable becomes invalid when pioupiou is 
 restarted. To avoid any mistake, pioupiou ensures that you cannot call any 
@@ -56,16 +56,38 @@ an exception:
 
 ```python
 >>> pp.restart()
->>> U(omega) # doctest: +ELLIPSIS
-Traceback (most recent call last):
-...
-pioupiou.InvalidRandomVariable
 >>> omega = pp.Omega()
 >>> U(omega) # doctest: +ELLIPSIS
 Traceback (most recent call last):
 ...
-pioupiou.InvalidRandomVariable
+pioupiou.InvalidRandomVariable...
 ```
+
+Similarly, if you generate a sample `omega` and then extend your model with a random 
+variable that requires a larger universe (see [Universe Structure](#universe-structure)), 
+using the sample afterwards will be an invalid operation:
+
+```python
+>>> pp.restart()
+>>> U1 = pp.Uniform()
+>>> omega = pp.Omega()
+>>> U2 = pp.Uniform()
+>>> U1(omega) # doctest: +ELLIPSIS
+Traceback (most recent call last):
+...
+pioupiou.InvalidSample...
+>>> U2(omega) # doctest: +ELLIPSIS
+Traceback (most recent call last):
+...
+pioupiou.InvalidSample...
+```
+
+!!! warning
+    New random variables do not always require a larger universe, so in *some* cases 
+    you can get away with using old samples (refer to the section 
+    [Universe Structure](#universe-structure) for details).
+    But you can remember that in any case, it is *always* safe to build completely 
+    your model (define all your random variables) before you start your sampling.
 
 ### Deterministic Sampling 
 
@@ -203,5 +225,20 @@ on the existing ones, you won't increase the number of primitive random variable
 array([0.01652764, 0.81327024])
 >>> U(omega), N(omega), X(omega)
 (0.016527635528529094, 0.8900118529686626, 0.9065394884971917)
+```
+
+As a special case, constant random variables
+– which depend deterministically of zero random variables - 
+do not increase the size of the universe either:
+
+```python
+>>> I = pp.Constant(1.0)
+>>> pp.Omega.n
+2
+>>> omega = pp.Omega()
+>>> omega
+array([0.91275558, 0.60663578])
+>>> U(omega), N(omega), X(omega), I(omega)
+(0.9127555772777217, 0.2705613202510434, 1.1833168975287651, 1.0)
 ```
 
