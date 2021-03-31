@@ -11,6 +11,7 @@ nav:
     - Gaussians: gaussians.md
     - Volatility: volatility.md
   - Distributions: distributions.md
+  - Calculus: calculus.md
   - The Universe: universe.md
   - Tests: tests.md
 
