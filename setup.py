@@ -23,6 +23,6 @@ options["long_description_content_type"] = "text/markdown"
 
 options["packages"] = setuptools.find_packages()
 
-options["install_requires"] = (["numpy", "wrapt"],)
+options["install_requires"] = (["numpy"],)
 
 setuptools.setup(**options)

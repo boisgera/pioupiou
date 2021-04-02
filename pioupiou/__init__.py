@@ -10,9 +10,8 @@ import numpy as np
 import numpy.random as npr
 import scipy.special
 import scipy.stats
-import wrapt
 
-
+# ------------------------------------------------------------------------------
 class Universe:
     def __init__(self):
         if hasattr(self, "rvs"):
@@ -154,30 +153,29 @@ class RandomVariable(abc.ABC):
 # This is a trick that should be carefully documented : "wrapping" the tests
 # into randomized function will allow use to use random variables in tests.
 
+def function(f):
+    def wrapped_function(*args, **kwargs):
+        all_args = list(args) + list(kwargs.values())
+        if not any(isinstance(arg, RandomVariable) for arg in all_args):
+            return f(*args, **kwargs)
 
-@wrapt.decorator
-def function(wrapped, instance, args, kwargs):
-    # if instance is not None: # Nah, forget about this ATM
-    #     args = [instance] + list(args)
-    all_args = list(args) + list(kwargs.values())
-    if not any(isinstance(arg, RandomVariable) for arg in all_args):
-        return wrapped(*args, **kwargs)
+        class Deterministic(RandomVariable):
+            def __init__(self, *args, **kwargs):  # TODO: I'd like these args and
+                # kwargs to have wrapped signature and be checked against it ...
+                # Does it work by default ?
+                super().__init__()
+                self.args = [randomize(arg) for arg in args]
+                self.kwargs = {k: randomize(v) for k, v in kwargs.items()}
 
-    class Deterministic(RandomVariable):
-        def __init__(self, *args, **kwargs):  # TODO: I'd like these args and
-            # kwargs to have wrapped signature and be checked against it ...
-            # Does it work by default ?
-            super().__init__()
-            self.args = [randomize(arg) for arg in args]
-            self.kwargs = {k: randomize(v) for k, v in kwargs.items()}
+            def __call__(self, omega):
+                self.check(omega)
+                args_values = [arg(omega) for arg in self.args]
+                kwargs_values = {k: v(omega) for k, v in kwargs.items()}
+                return f(*args_values, **kwargs_values)
 
-        def __call__(self, omega):
-            self.check(omega)
-            args_values = [arg(omega) for arg in self.args]
-            kwargs_values = {k: v(omega) for k, v in kwargs.items()}
-            return wrapped(*args_values, **kwargs_values)
+        return Deterministic(*args, **kwargs)
 
-    return Deterministic(*args, **kwargs)
+    return wrapped_function
 
 
 # # Using the bool function is fine (as long as the result is not used in tests)
