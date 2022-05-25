@@ -28,10 +28,10 @@ array([2.45281524, 1.27252521, 1.8983778 , 1.05011321, 2.54292569,
 
 ```python
 @pp.randomize
-def substract(x, y):
+def subtract(x, y):
     return x - y
 
-Z = substract(X, X)
+Z = subtract(X, X)
 ```
 
 ```python
